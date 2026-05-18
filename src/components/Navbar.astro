@@ -1,0 +1,215 @@
+---
+---
+<header id="navbar" role="banner">
+  <div class="nav-inner">
+    <a href="/frenchwithnaya/" class="nav-logo" aria-label="French with Naya — home">
+      <span class="logo-mark">French with <em>Naya</em></span>
+    </a>
+
+    <nav aria-label="Main navigation">
+      <ul class="nav-links" role="list">
+        <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+        <li><a href="#meet-naya" class="nav-link">Meet Naya</a></li>
+        <li><a href="#book" class="nav-link nav-cta">Book a Call</a></li>
+      </ul>
+    </nav>
+
+    <button
+      class="hamburger"
+      id="hamburger"
+      aria-label="Open navigation menu"
+      aria-expanded="false"
+      aria-controls="mobile-nav"
+    >
+      <span></span><span></span>
+    </button>
+  </div>
+
+  <!-- Mobile overlay -->
+  <div id="mobile-nav" class="mobile-nav" role="dialog" aria-modal="true" aria-label="Navigation menu" hidden>
+    <button class="mobile-nav-close" id="mobile-close" aria-label="Close navigation menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+    <nav aria-label="Mobile navigation">
+      <ul class="mobile-links" role="list">
+        <li><a href="#how-it-works" class="mobile-link">How It Works</a></li>
+        <li><a href="#meet-naya" class="mobile-link">Meet Naya</a></li>
+        <li><a href="#book" class="mobile-link">Book a Free Call</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  #navbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+  }
+  #navbar.scrolled {
+    background: var(--color-cream);
+    box-shadow: 0 1px 0 var(--color-chalk);
+  }
+  .nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 clamp(1.5rem, 5vw, 4rem);
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-logo {
+    display: flex;
+    align-items: center;
+  }
+  .logo-mark {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    font-weight: 300;
+    color: var(--color-ink);
+    letter-spacing: -0.01em;
+  }
+  .logo-mark em {
+    font-style: italic;
+    font-weight: 700;
+    color: var(--color-marigold);
+  }
+  .nav-links {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+  }
+  .nav-link {
+    font-family: var(--font-body);
+    font-size: var(--text-small);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+    position: relative;
+    transition: color 0.2s ease;
+  }
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -3px; left: 0;
+    width: 0; height: 1.5px;
+    background: var(--color-marigold);
+    transition: width 0.25s ease;
+  }
+  .nav-link:hover::after { width: 100%; }
+  .nav-cta {
+    padding: 0.5rem 1.25rem;
+    background: var(--color-marigold);
+    color: var(--color-ink) !important;
+    border-radius: 2px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  }
+  .nav-cta::after { display: none; }
+  .nav-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(232, 160, 32, 0.35);
+  }
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    padding: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  .hamburger span {
+    display: block;
+    width: 22px;
+    height: 1.5px;
+    background: var(--color-ink);
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+  .mobile-nav {
+    position: fixed;
+    inset: 0;
+    background: var(--color-ink);
+    z-index: 99;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .mobile-nav[hidden] { display: none; }
+  .mobile-nav-close {
+    position: absolute;
+    top: 1.5rem; right: clamp(1.5rem, 5vw, 4rem);
+    color: var(--color-cream);
+    opacity: 0.7;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  .mobile-links {
+    list-style: none;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+  .mobile-link {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    color: var(--color-cream);
+    letter-spacing: -0.02em;
+    transition: color 0.2s ease;
+  }
+  .mobile-link:hover { color: var(--color-marigold); }
+
+  @media (max-width: 768px) {
+    nav { display: none; }
+    .hamburger { display: flex; }
+  }
+</style>
+
+<script>
+  const navbar  = document.getElementById('navbar')!
+  const burger  = document.getElementById('hamburger')!
+  const mobileNav = document.getElementById('mobile-nav')!
+  const closeBtn  = document.getElementById('mobile-close')!
+
+  // Sticky scroll
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 80)
+  }, { passive: true })
+
+  // Hamburger
+  burger.addEventListener('click', () => {
+    const open = mobileNav.hidden === false
+    mobileNav.hidden = open
+    burger.setAttribute('aria-expanded', String(!open))
+  })
+  closeBtn.addEventListener('click', () => {
+    mobileNav.hidden = true
+    burger.setAttribute('aria-expanded', 'false')
+    burger.focus()
+  })
+
+  // Close on link click or Escape
+  mobileNav.querySelectorAll('.mobile-link').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileNav.hidden = true
+      burger.setAttribute('aria-expanded', 'false')
+    })
+  })
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !mobileNav.hidden) {
+      mobileNav.hidden = true
+      burger.setAttribute('aria-expanded', 'false')
+      burger.focus()
+    }
+  })
+</script>

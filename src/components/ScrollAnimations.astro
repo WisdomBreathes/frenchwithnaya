@@ -1,0 +1,51 @@
+---
+---
+<script>
+  import gsap from 'gsap'
+  import ScrollTrigger from 'gsap/ScrollTrigger'
+  import Lenis from 'lenis'
+
+  gsap.registerPlugin(ScrollTrigger)
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    // Lenis smooth scroll
+    if (!prefersReduced) {
+      const lenis = new Lenis({ lerp: 0.1, smoothWheel: true })
+      lenis.on('scroll', ScrollTrigger.update)
+      gsap.ticker.add((time) => { lenis.raf(time * 1000) })
+      gsap.ticker.lagSmoothing(0)
+    }
+
+    function initScrollAnimations() {
+      if (prefersReduced) return
+
+      // Batch reveal for all [data-reveal] elements not handled by individual components
+      ScrollTrigger.batch('[data-reveal]', {
+        onEnter: (batch) => gsap.to(batch, {
+          opacity: 1,
+          y: 0,
+          duration: 0.7,
+          ease: 'power3.out',
+          stagger: 0.12
+        }),
+        once: true,
+        start: 'top 85%'
+      })
+    }
+
+    // Preloader will call window.__initAnimations when done.
+    // Register our scroll animations as part of that pipeline.
+    const existing = (window as any).__initAnimations
+    ;(window as any).__initAnimations = function() {
+      if (typeof existing === 'function') existing()
+      initScrollAnimations()
+    }
+
+    // Fallback: if no preloader in DOM, init immediately
+    if (!document.getElementById('preloader')) {
+      initScrollAnimations()
+    }
+  })
+</script>

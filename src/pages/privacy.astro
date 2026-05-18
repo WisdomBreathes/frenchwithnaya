@@ -1,0 +1,87 @@
+---
+import Layout from '../layouts/Layout.astro'
+import Navbar from '../components/Navbar.astro'
+import Footer from '../components/Footer.astro'
+---
+<Layout
+  title="Privacy Policy"
+  description="Privacy Policy for French with Naya — how we handle your personal information."
+>
+  <Navbar />
+  <main id="main-content" style="
+    background: var(--color-cream);
+    padding: 8rem clamp(1.5rem, 5vw, 4rem) 6rem;
+  ">
+    <div style="max-width: 760px; margin: 0 auto;">
+      <p style="
+        font-family: var(--font-body);
+        font-size: var(--text-label);
+        font-weight: 500;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--color-marigold);
+        margin-bottom: 1.5rem;
+      ">Legal</p>
+      <h1 style="
+        font-family: var(--font-display);
+        font-style: italic;
+        font-weight: 700;
+        font-size: var(--text-h1);
+        color: var(--color-ink);
+        letter-spacing: -0.03em;
+        margin-bottom: 0.75rem;
+      ">Privacy Policy</h1>
+      <p style="font-family: var(--font-body); color: rgba(26,23,20,0.55); font-size: var(--text-small); margin-bottom: 3rem;">Last updated: May 2025</p>
+
+      <div style="
+        font-family: var(--font-body);
+        font-size: var(--text-body);
+        color: rgba(26,23,20,0.8);
+        line-height: 1.75;
+      ">
+        <h2 style="font-family: var(--font-display); font-weight: 700; font-size: var(--text-h3); color: var(--color-ink); margin: 2.5rem 0 1rem;">1. Who we are</h2>
+        <p>French with Naya is a one-to-one online French tutoring service operated by Nayaab. If you have questions about this policy, contact us through the enquiry form on our website.</p>
+
+        <h2 style="font-family: var(--font-display); font-weight: 700; font-size: var(--text-h3); color: var(--color-ink); margin: 2.5rem 0 1rem;">2. What personal information we collect</h2>
+        <p>We only collect information you give us directly:</p>
+        <ul style="margin: 1rem 0 1rem 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
+          <li>Name and email address (from the contact form)</li>
+          <li>Your child's age or grade (from the contact form)</li>
+          <li>Your message content</li>
+          <li>Booking information (name, email, selected time) when you book through Cal.com</li>
+        </ul>
+        <p>We do not collect payment information. We do not use tracking cookies or third-party analytics.</p>
+
+        <h2 style="font-family: var(--font-display); font-weight: 700; font-size: var(--text-h3); color: var(--color-ink); margin: 2.5rem 0 1rem;">3. How we use your information</h2>
+        <p>We use the information you provide to respond to your enquiry, schedule tutoring sessions, and send session reminders. We do not sell, share, or rent your information to any third party.</p>
+
+        <h2 style="font-family: var(--font-display); font-weight: 700; font-size: var(--text-h3); color: var(--color-ink); margin: 2.5rem 0 1rem;">4. Third-party services</h2>
+        <p>This website uses:</p>
+        <ul style="margin: 1rem 0 1rem 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
+          <li><strong>Web3Forms</strong> — processes contact form submissions. Your form data is transmitted to Web3Forms and forwarded to our email address. See their privacy policy at web3forms.com.</li>
+          <li><strong>Cal.com</strong> — handles booking scheduling and reminders. When you book a session, Cal.com collects your name, email, and selected time. See their privacy policy at cal.com.</li>
+        </ul>
+
+        <h2 style="font-family: var(--font-display); font-weight: 700; font-size: var(--text-h3); color: var(--color-ink); margin: 2.5rem 0 1rem;">5. Your rights under PIPEDA</h2>
+        <p>Under Canada's Personal Information Protection and Electronic Documents Act (PIPEDA), you have the right to access, correct, or request deletion of your personal information. To exercise any of these rights, contact us through the website form.</p>
+
+        <h2 style="font-family: var(--font-display); font-weight: 700; font-size: var(--text-h3); color: var(--color-ink); margin: 2.5rem 0 1rem;">6. Data retention</h2>
+        <p>We retain contact form submissions and booking records only as long as necessary to provide tutoring services and maintain session records. You may request deletion at any time.</p>
+
+        <h2 style="font-family: var(--font-display); font-weight: 700; font-size: var(--text-h3); color: var(--color-ink); margin: 2.5rem 0 1rem;">7. Changes to this policy</h2>
+        <p>We may update this policy from time to time. Changes will be posted on this page with an updated date.</p>
+      </div>
+
+      <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--color-chalk);">
+        <a href="/frenchwithnaya/" style="
+          font-family: var(--font-body);
+          font-size: var(--text-small);
+          color: rgba(26,23,20,0.55);
+          text-decoration: underline;
+          text-underline-offset: 3px;
+        ">← Back to home</a>
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Layout>

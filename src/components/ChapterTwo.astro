@@ -1,0 +1,241 @@
+---
+---
+<section id="who-its-for" class="chapter-two" aria-labelledby="ch2-heading">
+  <div class="ch2-header container">
+    <p class="chapter-label">Who It's For</p>
+    <h2 id="ch2-heading" class="chapter-title" data-reveal>
+      Every session fits exactly where your child is.
+    </h2>
+  </div>
+
+  <!-- Horizontal scroll track -->
+  <div class="track-wrap">
+    <div class="track" id="age-track" role="list" aria-label="Age groups">
+
+      <article class="age-card" role="listitem" style="--card-accent: var(--color-peach);">
+        <div class="card-age-range">JK &amp; Grade 1</div>
+        <div class="card-ages">Ages 4–6</div>
+        <h3 class="card-title">Building the first spark</h3>
+        <p class="card-desc">
+          Colours, numbers, animals, body parts, greetings — taught through songs, games, and lots of repetition. The goal is joy, not perfection.
+        </p>
+        <ul class="card-topics" aria-label="Topics covered">
+          <li>Colours &amp; numbers</li>
+          <li>Animals &amp; body parts</li>
+          <li>Basic greetings</li>
+          <li>French songs</li>
+        </ul>
+      </article>
+
+      <article class="age-card" role="listitem" style="--card-accent: var(--color-sky);">
+        <div class="card-age-range">Grade 2–3</div>
+        <div class="card-ages">Ages 7–9</div>
+        <h3 class="card-title">From words to sentences</h3>
+        <p class="card-desc">
+          Short stories, simple sentences, reading out loud, asking questions. Building confidence to actually say something.
+        </p>
+        <ul class="card-topics" aria-label="Topics covered">
+          <li>Simple sentences</li>
+          <li>Reading short texts</li>
+          <li>Question words</li>
+          <li>Stories &amp; games</li>
+        </ul>
+      </article>
+
+      <article class="age-card" role="listitem" style="--card-accent: var(--color-chalk);">
+        <div class="card-age-range">Grade 4–5</div>
+        <div class="card-ages">Ages 10–11</div>
+        <h3 class="card-title">Real conversation, real confidence</h3>
+        <p class="card-desc">
+          Grammar foundations, writing practice, discussion, and the satisfaction of saying something in French and being understood.
+        </p>
+        <ul class="card-topics" aria-label="Topics covered">
+          <li>Conversation practice</li>
+          <li>Writing &amp; grammar</li>
+          <li>Reading comprehension</li>
+          <li>Building confidence</li>
+        </ul>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  .chapter-two {
+    padding: clamp(5rem, 10vw, 9rem) 0 0;
+    background: var(--color-cream);
+    overflow: hidden;
+  }
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 clamp(1.5rem, 5vw, 4rem);
+  }
+  .ch2-header { margin-bottom: clamp(3rem, 5vw, 4rem); }
+  .chapter-label {
+    font-family: var(--font-body);
+    font-size: var(--text-label);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-marigold);
+    margin-bottom: var(--space-6);
+  }
+  .chapter-title {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 300;
+    font-size: var(--text-h1);
+    color: var(--color-ink);
+    max-width: 560px;
+  }
+
+  /* Horizontal scroll */
+  .track-wrap {
+    padding: 0 0 clamp(5rem, 10vw, 9rem);
+    overflow: hidden;
+  }
+  .track {
+    display: flex;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+    padding: 0 clamp(1.5rem, 5vw, 4rem);
+    will-change: transform;
+  }
+  .age-card {
+    flex: 0 0 clamp(280px, 38vw, 460px);
+    background: var(--card-accent, var(--color-peach));
+    border-radius: 4px;
+    padding: clamp(2rem, 4vw, 3rem);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    border: 1px solid rgba(26, 23, 20, 0.06);
+  }
+  .card-age-range {
+    font-family: var(--font-body);
+    font-size: var(--text-label);
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-marigold);
+  }
+  .card-ages {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    color: var(--color-ink);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .card-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--text-h3);
+    color: var(--color-ink);
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+  .card-desc {
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    color: rgba(26, 23, 20, 0.72);
+    line-height: 1.7;
+    flex: 1;
+  }
+  .card-topics {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    border-top: 1px solid rgba(26, 23, 20, 0.1);
+    padding-top: var(--space-4);
+    margin-top: auto;
+  }
+  .card-topics li {
+    font-family: var(--font-body);
+    font-size: var(--text-small);
+    color: rgba(26, 23, 20, 0.65);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .card-topics li::before {
+    content: '';
+    display: inline-block;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--color-marigold);
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 768px) {
+    .track {
+      flex-direction: column;
+      padding: 0 clamp(1.5rem, 5vw, 4rem);
+    }
+    .age-card { flex: none; }
+    .track-wrap { padding-bottom: clamp(5rem, 10vw, 9rem); }
+  }
+</style>
+
+<script>
+  import gsap from 'gsap'
+  import ScrollTrigger from 'gsap/ScrollTrigger'
+
+  gsap.registerPlugin(ScrollTrigger)
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (prefersReduced) return
+
+    const track = document.getElementById('age-track')
+    const wrap  = track?.closest('.track-wrap') as HTMLElement
+    if (!track || !wrap) return
+
+    // Only pin-scroll on wide enough screens
+    const mm = gsap.matchMedia()
+    mm.add('(min-width: 769px)', () => {
+      const cards = track.querySelectorAll('.age-card')
+      const totalScroll = track.scrollWidth - wrap.clientWidth + parseFloat(getComputedStyle(track).paddingLeft) * 2
+
+      gsap.to(track, {
+        x: -totalScroll,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '.chapter-two',
+          pin: true,
+          scrub: 1,
+          start: 'top top',
+          end: () => `+=${totalScroll}`,
+          invalidateOnRefresh: true
+        }
+      })
+
+      // Background color shift during horizontal scroll
+      gsap.to('body', {
+        backgroundColor: '#2E2319',
+        scrollTrigger: {
+          trigger: '.chapter-two',
+          scrub: true,
+          start: 'top 30%',
+          end: 'top top'
+        }
+      })
+      gsap.to('body', {
+        backgroundColor: '#FAF7F2',
+        scrollTrigger: {
+          trigger: '.chapter-two',
+          scrub: true,
+          start: 'bottom top',
+          end: 'bottom -20%'
+        }
+      })
+
+      return () => {
+        gsap.set('body', { backgroundColor: '' })
+      }
+    })
+  })
+</script>

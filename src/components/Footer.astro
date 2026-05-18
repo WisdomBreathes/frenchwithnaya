@@ -1,0 +1,113 @@
+---
+---
+<footer id="footer" role="contentinfo">
+  <div class="footer-bg-word" aria-hidden="true">au revoir.</div>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <a href="/frenchwithnaya/" class="footer-logo" aria-label="French with Naya — home">
+        French with <em>Naya</em>
+      </a>
+      <p class="footer-tagline">Making French the best part of their week.</p>
+    </div>
+
+    <div class="footer-divider" aria-hidden="true"></div>
+
+    <div class="footer-bottom">
+      <p class="footer-copy">
+        &copy; {new Date().getFullYear()} French with Naya. All rights reserved.
+      </p>
+      <nav class="footer-links" aria-label="Footer navigation">
+        <a href="/frenchwithnaya/privacy/" class="footer-link">Privacy Policy</a>
+        <span aria-hidden="true">·</span>
+        <a href="/frenchwithnaya/terms/" class="footer-link">Terms of Use</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<style>
+  #footer {
+    background: var(--color-deep);
+    position: relative;
+    overflow: hidden;
+    padding: clamp(4rem, 8vw, 7rem) 0 clamp(2rem, 4vw, 3rem);
+  }
+  .footer-bg-word {
+    position: absolute;
+    bottom: -1rem;
+    right: -1rem;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(5rem, 15vw, 13rem);
+    color: var(--color-cream);
+    opacity: 0.04;
+    pointer-events: none;
+    user-select: none;
+    white-space: nowrap;
+    line-height: 1;
+  }
+  .footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 clamp(1.5rem, 5vw, 4rem);
+    position: relative;
+    z-index: 1;
+  }
+  .footer-top {
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+  }
+  .footer-logo {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: 1.25rem;
+    color: var(--color-cream);
+    letter-spacing: -0.01em;
+    margin-bottom: var(--space-3);
+  }
+  .footer-logo em {
+    font-style: italic;
+    font-weight: 700;
+    color: var(--color-marigold);
+  }
+  .footer-tagline {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: rgba(250, 247, 242, 0.45);
+    margin-top: var(--space-2);
+  }
+  .footer-divider {
+    height: 1px;
+    background: rgba(250, 247, 242, 0.1);
+    margin-bottom: clamp(1.5rem, 3vw, 2rem);
+  }
+  .footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+  .footer-copy {
+    font-family: var(--font-body);
+    font-size: var(--text-small);
+    color: rgba(250, 247, 242, 0.35);
+  }
+  .footer-links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  .footer-links span { color: rgba(250, 247, 242, 0.25); font-size: var(--text-small); }
+  .footer-link {
+    font-family: var(--font-body);
+    font-size: var(--text-small);
+    color: rgba(250, 247, 242, 0.45);
+    transition: color 0.2s ease;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .footer-link:hover { color: var(--color-cream); }
+</style>

@@ -1,0 +1,165 @@
+---
+import '../styles/global.css'
+
+interface Props {
+  title: string
+  description: string
+  noindex?: boolean
+  ogImage?: string
+}
+
+const {
+  title,
+  description,
+  noindex = false,
+  ogImage = '/images/og-default.jpg'
+} = Astro.props
+
+const siteUrl = 'https://wisdombreathes.github.io/frenchwithnaya'
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "LocalBusiness",
+      "@id": siteUrl,
+      "name": "French with Naya",
+      "url": siteUrl,
+      "description": "One-to-one online French tutoring for children from Junior Kindergarten through Grade 5.",
+      "priceRange": "$$",
+      "serviceType": "Online French Tutoring",
+      "areaServed": "Canada",
+      "availableLanguage": ["English", "French"]
+    },
+    {
+      "@type": "Person",
+      "name": "Nayaab",
+      "alternateName": "Naya",
+      "jobTitle": "French Tutor",
+      "worksFor": { "@id": siteUrl },
+      "knowsLanguage": ["French", "English"]
+    }
+  ]
+}
+---
+<!doctype html>
+<html lang="en-CA">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>{title} | French with Naya</title>
+  <meta name="description" content={description} />
+  {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+  <link rel="canonical" href={canonicalUrl} />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={`${title} | French with Naya`} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonicalUrl} />
+  <meta property="og:image" content={`${siteUrl}${ogImage}`} />
+  <meta property="og:locale" content="en_CA" />
+  <meta property="og:site_name" content="French with Naya" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,300;1,9..144,700&family=DM+Sans:wght@400;500;600&display=swap" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/frenchwithnaya/favicon.svg" />
+
+  <!-- JSON-LD -->
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <style>
+    /* View transitions */
+    @view-transition { navigation: auto; }
+    ::view-transition-old(root) { animation: fade-out 0.2s ease; }
+    ::view-transition-new(root) { animation: fade-in 0.2s ease; }
+    @keyframes fade-out { from { opacity: 1; } to { opacity: 0; } }
+    @keyframes fade-in  { from { opacity: 0; } to { opacity: 1; } }
+
+    /* Custom cursor */
+    .cursor {
+      position: fixed;
+      width: 10px; height: 10px;
+      background: var(--color-marigold);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s ease, height 0.2s ease, opacity 0.2s ease;
+    }
+    .cursor-ring {
+      position: fixed;
+      width: 34px; height: 34px;
+      border: 1.5px solid var(--color-marigold);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      opacity: 0.5;
+    }
+    @media (hover: none) {
+      .cursor, .cursor-ring { display: none; }
+    }
+
+    /* Skip link */
+    .skip-link {
+      position: absolute;
+      top: -48px; left: 16px;
+      z-index: 10000;
+      background: var(--color-marigold);
+      color: var(--color-ink);
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 2px;
+      transition: top 0.15s ease;
+      text-decoration: none;
+    }
+    .skip-link:focus { top: 8px; }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <div class="cursor" aria-hidden="true"></div>
+  <div class="cursor-ring" aria-hidden="true"></div>
+
+  <slot />
+
+  <script>
+    // Custom cursor
+    const cursor = document.querySelector('.cursor') as HTMLElement
+    const ring = document.querySelector('.cursor-ring') as HTMLElement
+    if (cursor && ring) {
+      let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX
+        mouseY = e.clientY
+        cursor.style.left = mouseX + 'px'
+        cursor.style.top = mouseY + 'px'
+      })
+      function animateRing() {
+        ringX += (mouseX - ringX) * 0.1
+        ringY += (mouseY - ringY) * 0.1
+        ring.style.left = ringX + 'px'
+        ring.style.top = ringY + 'px'
+        requestAnimationFrame(animateRing)
+      }
+      animateRing()
+      // Shrink dot on links/buttons
+      document.querySelectorAll('a, button').forEach(el => {
+        el.addEventListener('mouseenter', () => { cursor.style.opacity = '0' })
+        el.addEventListener('mouseleave', () => { cursor.style.opacity = '1' })
+      })
+    }
+  </script>
+</body>
+</html>

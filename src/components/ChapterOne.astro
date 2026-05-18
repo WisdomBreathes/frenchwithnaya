@@ -1,0 +1,151 @@
+---
+---
+<section id="how-it-works" class="chapter-one" aria-labelledby="ch1-heading">
+  <div class="container">
+    <p class="chapter-label">How It Works</p>
+    <h2 id="ch1-heading" class="chapter-title" data-reveal>
+      Three simple steps to French that sticks.
+    </h2>
+
+    <ol class="steps-list" aria-label="How the tutoring works">
+      <li class="step" data-reveal>
+        <span class="step-number" aria-hidden="true">01</span>
+        <div class="step-content">
+          <h3 class="step-title">Free intro call</h3>
+          <p class="step-desc">
+            Naya meets your child, hears where they are, and answers every question you have. No prep needed. Twenty minutes, totally free.
+          </p>
+        </div>
+      </li>
+      <li class="step" data-reveal>
+        <span class="step-number" aria-hidden="true">02</span>
+        <div class="step-content">
+          <h3 class="step-title">Tailored sessions</h3>
+          <p class="step-desc">
+            Every lesson is built around your child — their age, their pace, what makes them laugh. A 5-year-old gets songs and colours. A 10-year-old gets conversation and stories.
+          </p>
+        </div>
+      </li>
+      <li class="step" data-reveal>
+        <span class="step-number" aria-hidden="true">03</span>
+        <div class="step-content">
+          <h3 class="step-title">Real progress, shared with you</h3>
+          <p class="step-desc">
+            You hear what they worked on after each session. No guessing. You'll know exactly where your child is growing.
+          </p>
+        </div>
+      </li>
+    </ol>
+
+    <div class="ch1-cta" data-reveal>
+      <a
+        href="https://cal.com/naya-831b2r/30min"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn-primary"
+      >
+        Start with a free call
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .chapter-one {
+    padding: clamp(5rem, 10vw, 9rem) 0;
+    background: var(--color-cream);
+  }
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 clamp(1.5rem, 5vw, 4rem);
+  }
+  .chapter-label {
+    font-family: var(--font-body);
+    font-size: var(--text-label);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-marigold);
+    margin-bottom: var(--space-6);
+  }
+  .chapter-title {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 300;
+    font-size: var(--text-h1);
+    color: var(--color-ink);
+    max-width: 560px;
+    margin-bottom: clamp(3rem, 6vw, 5rem);
+  }
+  .steps-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    max-width: 760px;
+  }
+  .step {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: var(--space-8);
+    padding: var(--space-12) 0;
+    border-top: 1px solid var(--color-chalk);
+    align-items: start;
+  }
+  .step:last-child { border-bottom: 1px solid var(--color-chalk); }
+  .step-number {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: var(--color-marigold);
+    line-height: 1;
+    padding-top: 4px;
+  }
+  .step-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--text-h3);
+    color: var(--color-ink);
+    margin-bottom: var(--space-3);
+    letter-spacing: -0.01em;
+  }
+  .step-desc {
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    color: rgba(26, 23, 20, 0.7);
+    line-height: 1.7;
+    max-width: 540px;
+  }
+  .ch1-cta {
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+  }
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 1rem 2rem;
+    background: var(--color-marigold);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    font-size: var(--text-small);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-decoration: none;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(232, 160, 32, 0.4);
+  }
+
+  @media (max-width: 480px) {
+    .step {
+      grid-template-columns: 60px 1fr;
+      gap: var(--space-4);
+    }
+    .step-number { font-size: 1.75rem; }
+  }
+</style>

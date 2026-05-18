@@ -1,0 +1,74 @@
+---
+---
+<div id="preloader" aria-hidden="true">
+  <span class="preloader-word">bonjour.</span>
+</div>
+
+<style>
+  #preloader {
+    position: fixed;
+    inset: 0;
+    background: var(--color-ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9000;
+    will-change: opacity;
+  }
+  .preloader-word {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(3rem, 10vw, 7rem);
+    color: var(--color-cream);
+    letter-spacing: -0.02em;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+</style>
+
+<script>
+  import gsap from 'gsap'
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const preloader = document.getElementById('preloader')
+    const word = document.querySelector('.preloader-word') as HTMLElement
+
+    if (!preloader || !word) {
+      window.__animationsReady?.()
+      return
+    }
+
+    const tl = gsap.timeline({
+      onComplete: () => {
+        preloader.style.display = 'none'
+        document.body.style.overflow = ''
+        // Signal that animations can now init
+        if (typeof window.__initAnimations === 'function') {
+          window.__initAnimations()
+        }
+      }
+    })
+
+    document.body.style.overflow = 'hidden'
+
+    tl.to(word, {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      ease: 'power3.out'
+    })
+    .to(word, {
+      opacity: 0,
+      y: -20,
+      duration: 0.5,
+      ease: 'power2.in',
+      delay: 0.6
+    })
+    .to(preloader, {
+      opacity: 0,
+      duration: 0.4,
+      ease: 'power2.inOut'
+    })
+  })
+</script>

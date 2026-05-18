@@ -1,0 +1,32 @@
+---
+import Layout from '../layouts/Layout.astro'
+import Preloader from '../components/Preloader.astro'
+import Navbar from '../components/Navbar.astro'
+import HeroSection from '../components/HeroSection.astro'
+import TrustBar from '../components/TrustBar.astro'
+import ChapterOne from '../components/ChapterOne.astro'
+import ChapterTwo from '../components/ChapterTwo.astro'
+import ChapterThree from '../components/ChapterThree.astro'
+import TestimonialsSection from '../components/TestimonialsSection.astro'
+import BookingSection from '../components/BookingSection.astro'
+import Footer from '../components/Footer.astro'
+import ScrollAnimations from '../components/ScrollAnimations.astro'
+---
+<Layout
+  title="French Tutoring for Kids"
+  description="One-to-one online French lessons for children from Junior Kindergarten through Grade 5. Book a free intro call with Naya today."
+>
+  <Preloader />
+  <ScrollAnimations />
+  <Navbar />
+  <main id="main-content">
+    <HeroSection />
+    <TrustBar />
+    <ChapterOne />
+    <ChapterTwo />
+    <ChapterThree />
+    <TestimonialsSection />
+    <BookingSection />
+  </main>
+  <Footer />
+</Layout>

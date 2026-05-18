@@ -1,0 +1,146 @@
+---
+const testimonials = [
+  {
+    quote: "My daughter used to groan every time I mentioned tutoring. After two sessions with Naya, she was asking when her next French lesson was. That's never happened before.",
+    name: "Sarah M.",
+    detail: "Parent of a Grade 2 student"
+  },
+  {
+    quote: "Naya has a real gift with kids. My son is 6 and his attention span is about four minutes — somehow she keeps him engaged for the full half hour. His teacher noticed the improvement.",
+    name: "James T.",
+    detail: "Parent of a JK student"
+  },
+  {
+    quote: "We tried a big tutoring centre first. It felt like a factory. Naya actually knows my daughter's name, her favourite stories, what makes her laugh. That makes all the difference.",
+    name: "Priya K.",
+    detail: "Parent of a Grade 4 student"
+  }
+]
+---
+<section id="testimonials" class="testimonials-section" aria-labelledby="testimonials-heading">
+  <div class="container">
+    <p class="chapter-label">What Parents Say</p>
+    <h2 id="testimonials-heading" class="chapter-title" data-reveal>
+      Real words from real parents.
+    </h2>
+
+    <div class="testimonials-list" role="list">
+      {testimonials.map((t, i) => (
+        <figure
+          class="testimonial"
+          role="listitem"
+          style={i % 2 === 1 ? 'margin-left: clamp(2rem, 8vw, 8rem);' : ''}
+        >
+          <blockquote class="testimonial-quote">
+            <p>"{t.quote}"</p>
+          </blockquote>
+          <figcaption class="testimonial-meta">
+            <span class="testimonial-name">{t.name}</span>
+            <span class="testimonial-detail">{t.detail}</span>
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .testimonials-section {
+    padding: clamp(5rem, 10vw, 9rem) 0;
+    background: var(--color-cream);
+  }
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 clamp(1.5rem, 5vw, 4rem);
+  }
+  .chapter-label {
+    font-family: var(--font-body);
+    font-size: var(--text-label);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-marigold);
+    margin-bottom: var(--space-6);
+  }
+  .chapter-title {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 300;
+    font-size: var(--text-h1);
+    color: var(--color-ink);
+    max-width: 480px;
+    margin-bottom: clamp(3rem, 6vw, 5rem);
+  }
+  .testimonials-list {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(2rem, 4vw, 3rem);
+    max-width: 880px;
+  }
+  .testimonial {
+    padding: clamp(2rem, 4vw, 3rem);
+    background: var(--color-chalk);
+    border-radius: 4px;
+    overflow: hidden;
+    clip-path: inset(0 100% 0 0);
+  }
+  .testimonial-quote p {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(1.125rem, 2vw, 1.375rem);
+    color: var(--color-ink);
+    line-height: 1.65;
+    margin-bottom: var(--space-6);
+  }
+  .testimonial-meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+  .testimonial-name {
+    font-family: var(--font-body);
+    font-size: var(--text-small);
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+  .testimonial-detail {
+    font-family: var(--font-body);
+    font-size: var(--text-small);
+    color: rgba(26, 23, 20, 0.55);
+  }
+
+  @media (max-width: 768px) {
+    .testimonial { margin-left: 0 !important; }
+  }
+</style>
+
+<script>
+  import gsap from 'gsap'
+  import ScrollTrigger from 'gsap/ScrollTrigger'
+
+  gsap.registerPlugin(ScrollTrigger)
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    if (prefersReduced) {
+      document.querySelectorAll('.testimonial').forEach(el => {
+        (el as HTMLElement).style.clipPath = 'inset(0 0% 0 0)'
+      })
+      return
+    }
+
+    gsap.to('.testimonial', {
+      clipPath: 'inset(0 0% 0 0)',
+      duration: 0.9,
+      ease: 'power3.inOut',
+      stagger: 0.2,
+      scrollTrigger: {
+        trigger: '.testimonials-list',
+        start: 'top 75%'
+      }
+    })
+  })
+</script>

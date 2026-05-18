@@ -1,0 +1,79 @@
+---
+import Layout from '../layouts/Layout.astro'
+import Navbar from '../components/Navbar.astro'
+import Footer from '../components/Footer.astro'
+---
+<Layout
+  title="Message sent"
+  description="Your message has been sent to Naya."
+  noindex={true}
+>
+  <Navbar />
+  <main id="main-content" style="
+    min-height: 80svh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-cream);
+    padding: 8rem clamp(1.5rem, 5vw, 4rem) 5rem;
+  ">
+    <div style="max-width: 560px; text-align: center;">
+      <p style="
+        font-family: var(--font-display);
+        font-style: italic;
+        font-size: clamp(3rem, 8vw, 5rem);
+        color: var(--color-marigold);
+        line-height: 1;
+        margin-bottom: 1.5rem;
+      ">merci.</p>
+      <h1 style="
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: var(--text-h2);
+        color: var(--color-ink);
+        margin-bottom: 1rem;
+        letter-spacing: -0.02em;
+      ">Message sent.</h1>
+      <p style="
+        font-family: var(--font-body);
+        font-size: var(--text-body);
+        color: rgba(26,23,20,0.7);
+        line-height: 1.7;
+        margin-bottom: 2.5rem;
+      ">
+        Naya will be in touch within one business day. If you'd like to book a time right away, you can do that below.
+      </p>
+      <a
+        href="https://cal.com/naya-831b2r/30min"
+        target="_blank"
+        rel="noopener noreferrer"
+        style="
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 1rem 2rem;
+          background: var(--color-marigold);
+          color: var(--color-ink);
+          font-family: var(--font-body);
+          font-size: var(--text-small);
+          font-weight: 600;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+          border-radius: 2px;
+          text-decoration: none;
+          transition: transform 0.2s ease;
+          margin-bottom: 1.5rem;
+        "
+      >Book a call with Naya</a>
+      <br />
+      <a href="/frenchwithnaya/" style="
+        font-family: var(--font-body);
+        font-size: var(--text-small);
+        color: rgba(26,23,20,0.55);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      ">← Back to home</a>
+    </div>
+  </main>
+  <Footer />
+</Layout>
