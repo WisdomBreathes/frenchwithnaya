@@ -1,9 +1,9 @@
 ---
 ---
 <!--
-  Pinned scroll section. As user scrolls through:
-  0–40%   → blue and red panels slide in from edges, white fades in
-  40–65%  → flag fully assembled, text appears
+  Pinned scroll section:
+  0–40%   → blue/red panels slide in from edges, white fades in
+  35–65%  → "liberté." writes itself left-to-right, pen nib leads
   70–100% → everything fades back to cream
 -->
 <section class="flag-section" aria-hidden="true">
@@ -11,7 +11,16 @@
     <div class="flag-panel flag-blue"></div>
     <div class="flag-panel flag-white"></div>
     <div class="flag-panel flag-red"></div>
-    <p class="flag-text">liberté.</p>
+
+    <!-- Text with writing reveal -->
+    <div class="flag-text-wrap">
+      <p class="flag-text">liberté.</p>
+      <!-- Pen nib that leads the text reveal -->
+      <div class="flag-pen" aria-hidden="true">
+        <div class="pen-nib"></div>
+        <div class="pen-trail"></div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -34,27 +43,58 @@
     will-change: transform;
   }
   .flag-blue  { background: #002395; }
-  .flag-white { background: #F5F0E8; } /* warm white — matches cream family */
+  .flag-white { background: #F5F0E8; }
   .flag-red   { background: #ED2939; }
 
-  .flag-text {
+  /* Text container — centered, same size as the text */
+  .flag-text-wrap {
     position: absolute;
     inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
+    pointer-events: none;
+  }
+
+  .flag-text {
     font-family: var(--font-display);
     font-style: italic;
     font-weight: 300;
     font-size: clamp(4rem, 12vw, 10rem);
     color: var(--color-ink);
     letter-spacing: -0.03em;
-    pointer-events: none;
-    opacity: 0;
-    transform: translateY(20px);
+    white-space: nowrap;
+    /* Hidden behind a clip — reveals left to right */
+    clip-path: inset(0 100% 0 0);
+    position: relative;
   }
 
-  /* Reduced motion: skip the whole section */
+  /* Pen nib */
+  .flag-pen {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+    /* JS will position and move this */
+    pointer-events: none;
+  }
+  .pen-nib {
+    width: 2px;
+    height: clamp(3rem, 8vw, 7rem);
+    background: var(--color-ink);
+    border-radius: 0 0 2px 2px;
+    opacity: 0.6;
+  }
+  .pen-trail {
+    width: 2px;
+    height: clamp(1rem, 3vw, 2.5rem);
+    background: linear-gradient(to bottom, rgba(26,23,20,0.3), transparent);
+    margin-top: 2px;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .flag-section { display: none; }
   }
@@ -70,43 +110,79 @@
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (prefersReduced) return
 
-    const section  = document.querySelector('.flag-section') as HTMLElement
-    const wrapper  = document.querySelector('.flag-wrapper') as HTMLElement
-    const blue     = document.querySelector('.flag-blue') as HTMLElement
-    const red      = document.querySelector('.flag-red') as HTMLElement
-    const white    = document.querySelector('.flag-white') as HTMLElement
-    const text     = document.querySelector('.flag-text') as HTMLElement
+    const section = document.querySelector('.flag-section') as HTMLElement
+    const wrapper = document.querySelector('.flag-wrapper') as HTMLElement
+    const blue    = document.querySelector('.flag-blue') as HTMLElement
+    const red     = document.querySelector('.flag-red') as HTMLElement
+    const white   = document.querySelector('.flag-white') as HTMLElement
+    const text    = document.querySelector('.flag-text') as HTMLElement
+    const pen     = document.querySelector('.flag-pen') as HTMLElement
 
-    if (!section || !wrapper) return
+    if (!section || !wrapper || !text || !pen) return
 
-    // Start state: blue off-screen left, red off-screen right, white invisible
+    // Measure where the text sits so we can track the pen across it
+    function getPenRange() {
+      const textRect = text.getBoundingClientRect()
+      const sectionRect = section.getBoundingClientRect()
+      // left and right edges of the text, relative to the section
+      return {
+        left:  textRect.left - sectionRect.left,
+        right: textRect.right - sectionRect.left,
+      }
+    }
+
+    // Initial states
     gsap.set(blue,  { xPercent: -100 })
     gsap.set(red,   { xPercent: 100 })
     gsap.set(white, { opacity: 0 })
+    gsap.set(text,  { clipPath: 'inset(0 100% 0 0)' })
+    gsap.set(pen,   { opacity: 0 })
 
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: section,
         start: 'top top',
-        end: '+=250%',   // scroll 2.5x the section height to pass through
+        end: '+=250%',
         pin: true,
         scrub: 0.8,
         anticipatePin: 1,
+        onRefresh: () => {
+          // Reposition pen start on resize
+          const range = getPenRange()
+          gsap.set(pen, { left: range.left })
+        }
       }
     })
 
+    const range = getPenRange()
+
     tl
-      // Phase 1 — panels slide in together (0 → 0.4)
+      // Phase 1 — flag assembles (0 → 0.4)
       .to(blue,  { xPercent: 0, ease: 'power2.out' }, 0)
       .to(red,   { xPercent: 0, ease: 'power2.out' }, 0)
       .to(white, { opacity: 1, ease: 'power2.out' }, 0)
 
-      // Phase 2 — text fades in once flag is assembled (0.35 → 0.55)
-      .to(text, { opacity: 1, y: 0, ease: 'power2.out' }, 0.35)
+      // Phase 2 — pen appears at left edge of text (0.33)
+      .to(pen, { opacity: 1, duration: 0.02 }, 0.33)
 
-      // Phase 3 — hold (implicit — timeline just stays put)
+      // Phase 2b — text clips in left-to-right AND pen moves with it (0.33 → 0.62)
+      .to(text, {
+        clipPath: 'inset(0 0% 0 0)',
+        ease: 'none',
+      }, 0.33)
+      .fromTo(pen, {
+        left: range.left,
+      }, {
+        left: range.right,
+        ease: 'none',
+      }, 0.33)
 
-      // Phase 4 — whole wrapper fades back to nothing (0.7 → 1.0)
-      .to(wrapper, { opacity: 0, ease: 'power2.inOut' }, 0.7)
+      // Pen fades out as writing finishes (0.62 → 0.66)
+      .to(pen, { opacity: 0, duration: 0.04 }, 0.62)
+
+      // Phase 3 — hold (implicit)
+
+      // Phase 4 — fade to cream (0.72 → 1.0)
+      .to(wrapper, { opacity: 0, ease: 'power2.inOut' }, 0.72)
   })
 </script>
