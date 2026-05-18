@@ -14,6 +14,7 @@
     justify-content: center;
     z-index: 9000;
     will-change: opacity;
+    pointer-events: none;
   }
   .preloader-word {
     font-family: var(--font-display);
@@ -31,44 +32,51 @@
   import gsap from 'gsap'
 
   document.addEventListener('DOMContentLoaded', () => {
-    const preloader = document.getElementById('preloader')
+    const preloader = document.getElementById('preloader') as HTMLElement
     const word = document.querySelector('.preloader-word') as HTMLElement
 
     if (!preloader || !word) {
-      window.__animationsReady?.()
+      if (typeof (window as any).__initAnimations === 'function') {
+        (window as any).__initAnimations()
+      }
       return
     }
 
-    const tl = gsap.timeline({
-      onComplete: () => {
-        preloader.style.display = 'none'
-        document.body.style.overflow = ''
-        // Signal that animations can now init
-        if (typeof window.__initAnimations === 'function') {
-          window.__initAnimations()
-        }
-      }
-    })
-
     document.body.style.overflow = 'hidden'
 
+    const tl = gsap.timeline()
+
+    // bonjour. slides in
     tl.to(word, {
       opacity: 1,
       y: 0,
       duration: 0.8,
       ease: 'power3.out'
     })
+    // hold
     .to(word, {
       opacity: 0,
       y: -20,
       duration: 0.5,
       ease: 'power2.in',
-      delay: 0.6
+      delay: 0.5
     })
+    // Fire hero animations NOW — simultaneous with preloader fade
+    // so the handoff feels like one motion, not two separate events
+    .call(() => {
+      document.body.style.overflow = ''
+      if (typeof (window as any).__initAnimations === 'function') {
+        (window as any).__initAnimations()
+      }
+    })
+    // Preloader fades out over the same window as the hero animates in
     .to(preloader, {
       opacity: 0,
-      duration: 0.4,
-      ease: 'power2.inOut'
-    })
+      duration: 0.5,
+      ease: 'power2.inOut',
+      onComplete: () => {
+        preloader.style.display = 'none'
+      }
+    }, '<') // '<' means start at the same time as the previous .call
   })
 </script>

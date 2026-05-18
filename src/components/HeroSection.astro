@@ -99,6 +99,7 @@
     letter-spacing: -0.03em;
     margin-bottom: var(--space-8);
     overflow: hidden;
+    opacity: 0;
   }
   .hero-sub {
     font-family: var(--font-body);
@@ -224,9 +225,10 @@
       return
     }
 
-    // SplitText headline reveal
-    const headline = document.querySelector('.hero-headline')
+    // Make headline visible first so SplitText can measure it, then animate words
+    const headline = document.querySelector('.hero-headline') as HTMLElement
     if (headline) {
+      headline.style.opacity = '1'
       SplitText.create('.hero-headline', {
         type: 'lines,words',
         autoSplit: true,
@@ -242,14 +244,14 @@
       })
     }
 
-    // Stagger in eyebrow, sub, CTA
+    // Stagger in eyebrow, sub, CTA — slight delay so headline leads
     gsap.to(['.hero-eyebrow', '.hero-sub', '.btn-primary'], {
       opacity: 1,
       y: 0,
       duration: 0.7,
       stagger: 0.15,
       ease: 'power3.out',
-      delay: 0.4
+      delay: 0.2
     })
 
     // Soft parallax on photo
