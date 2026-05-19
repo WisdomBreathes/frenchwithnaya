@@ -28,11 +28,59 @@ import ScrollAnimations from '../components/ScrollAnimations.astro'
     <ChapterThree />
     <FlagInterstitial />
     <TestimonialsSection />
-    <!-- cream → marigold: tall gradient pulled up into the section's bottom padding -->
-    <div aria-hidden="true" style="height:280px;background:linear-gradient(to bottom,var(--color-cream) 0%,var(--color-cream) 20%,var(--color-marigold) 100%);margin-top:-80px;position:relative;z-index:0;pointer-events:none;"></div>
+    <div class="sg sg-cream-marigold" aria-hidden="true"></div>
     <BookingSection />
-    <!-- marigold → deep -->
-    <div aria-hidden="true" style="height:280px;background:linear-gradient(to bottom,var(--color-marigold) 0%,var(--color-deep) 100%);margin-top:-1px;pointer-events:none;"></div>
+    <div class="sg sg-marigold-deep" aria-hidden="true"></div>
   </main>
   <Footer />
 </Layout>
+
+<style>
+  /*
+   * Smooth section-to-section gradients.
+   *
+   * Technique: "easing gradient" — multiple stops at ease-in-out positions
+   * combined with `color-mix(in oklch)` interpolation.
+   * OKLCH avoids the muddy dark midpoints that RGB linear-gradient produces
+   * between a dark colour and a vivid one (same reason Photoshop looks smoother).
+   * Supported: Chrome 111+, Firefox 113+, Safari 16.2+.
+   */
+  .sg {
+    height: 300px;
+    pointer-events: none;
+    position: relative;
+    z-index: 0;
+  }
+
+  /* Testimonials (cream) → Booking (marigold)
+     Held at cream for first 15%, then eased in via OKLCH */
+  .sg-cream-marigold {
+    margin-top: -80px;
+    background: linear-gradient(to bottom,
+      var(--color-cream)                                               0%,
+      var(--color-cream)                                              15%,
+      color-mix(in oklch, var(--color-marigold)  6%, var(--color-cream)) 24%,
+      color-mix(in oklch, var(--color-marigold) 18%, var(--color-cream)) 34%,
+      color-mix(in oklch, var(--color-marigold) 38%, var(--color-cream)) 45%,
+      color-mix(in oklch, var(--color-marigold) 62%, var(--color-cream)) 57%,
+      color-mix(in oklch, var(--color-marigold) 82%, var(--color-cream)) 69%,
+      color-mix(in oklch, var(--color-marigold) 94%, var(--color-cream)) 81%,
+      var(--color-marigold)                                          100%
+    );
+  }
+
+  /* Booking (marigold) → Footer (deep dark) — full ease-in-out across 300px */
+  .sg-marigold-deep {
+    margin-top: -1px;
+    background: linear-gradient(to bottom,
+      var(--color-marigold)                                           0%,
+      color-mix(in oklch, var(--color-deep)  6%, var(--color-marigold)) 19%,
+      color-mix(in oklch, var(--color-deep) 18%, var(--color-marigold)) 32%,
+      color-mix(in oklch, var(--color-deep) 38%, var(--color-marigold)) 45%,
+      color-mix(in oklch, var(--color-deep) 62%, var(--color-marigold)) 57%,
+      color-mix(in oklch, var(--color-deep) 82%, var(--color-marigold)) 70%,
+      color-mix(in oklch, var(--color-deep) 94%, var(--color-marigold)) 83%,
+      var(--color-deep)                                              100%
+    );
+  }
+</style>
