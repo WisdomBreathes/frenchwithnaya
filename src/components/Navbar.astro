@@ -8,11 +8,64 @@
 
     <nav aria-label="Main navigation">
       <ul class="nav-links" role="list">
-        <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
-        <li><a href="#meet-naya" class="nav-link">Meet Naya</a></li>
-        <li><a href="#book" class="nav-link nav-cta">Book a Call</a></li>
+        <li>
+          <a href="#how-it-works" class="nav-link">
+            <span class="t-en">How It Works</span>
+            <span class="t-fr">Comment ça marche</span>
+          </a>
+        </li>
+        <li>
+          <a href="#meet-naya" class="nav-link">
+            <span class="t-en">Meet Naya</span>
+            <span class="t-fr">Rencontrez Naya</span>
+          </a>
+        </li>
       </ul>
     </nav>
+
+    <div class="nav-controls">
+      <!-- Language toggle -->
+      <button
+        id="lang-toggle"
+        class="ctrl-btn lang-btn"
+        aria-label="Switch to French"
+        title="Switch language"
+      >
+        <span class="lang-label t-en" aria-hidden="true">FR</span>
+        <span class="lang-label t-fr" aria-hidden="true">EN</span>
+      </button>
+
+      <!-- Dark mode toggle -->
+      <button
+        id="theme-toggle"
+        class="ctrl-btn theme-btn"
+        aria-label="Switch to dark mode"
+        title="Toggle dark mode"
+      >
+        <!-- Sun (shown in dark mode to switch back to light) -->
+        <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"/>
+          <line x1="12" y1="2" x2="12" y2="4"/>
+          <line x1="12" y1="20" x2="12" y2="22"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="2" y1="12" x2="4" y2="12"/>
+          <line x1="20" y1="12" x2="22" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <!-- Moon (shown in light mode to switch to dark) -->
+        <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+
+      <!-- Book CTA -->
+      <a href="#book" class="nav-cta">
+        <span class="t-en">Book a Call</span>
+        <span class="t-fr">Réserver</span>
+      </a>
+    </div>
 
     <button
       class="hamburger"
@@ -34,10 +87,47 @@
     </button>
     <nav aria-label="Mobile navigation">
       <ul class="mobile-links" role="list">
-        <li><a href="#how-it-works" class="mobile-link">How It Works</a></li>
-        <li><a href="#meet-naya" class="mobile-link">Meet Naya</a></li>
-        <li><a href="#book" class="mobile-link">Book a Free Call</a></li>
+        <li>
+          <a href="#how-it-works" class="mobile-link">
+            <span class="t-en">How It Works</span>
+            <span class="t-fr">Comment ça marche</span>
+          </a>
+        </li>
+        <li>
+          <a href="#meet-naya" class="mobile-link">
+            <span class="t-en">Meet Naya</span>
+            <span class="t-fr">Rencontrez Naya</span>
+          </a>
+        </li>
+        <li>
+          <a href="#book" class="mobile-link">
+            <span class="t-en">Book a Free Call</span>
+            <span class="t-fr">Réserver un appel gratuit</span>
+          </a>
+        </li>
       </ul>
+      <!-- Controls in mobile menu -->
+      <div class="mobile-controls">
+        <button id="lang-toggle-mobile" class="ctrl-btn lang-btn mobile-ctrl" aria-label="Switch language">
+          <span class="t-en">Passer en français</span>
+          <span class="t-fr">Switch to English</span>
+        </button>
+        <button id="theme-toggle-mobile" class="ctrl-btn theme-btn mobile-ctrl" aria-label="Toggle dark mode">
+          <span class="t-en icon-sun-label" style="display:none">
+            <span class="t-always">☀ Light mode</span>
+          </span>
+          <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"/>
+            <line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+      </div>
     </nav>
   </div>
 </header>
@@ -61,10 +151,12 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: var(--space-6);
   }
   .nav-logo {
     display: flex;
     align-items: center;
+    flex-shrink: 0;
   }
   .logo-mark {
     font-family: var(--font-display);
@@ -103,18 +195,68 @@
     transition: width 0.25s ease;
   }
   .nav-link:hover::after { width: 100%; }
+
+  /* Controls row */
+  .nav-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-shrink: 0;
+  }
+  .ctrl-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1.5px solid var(--color-border);
+    color: var(--color-ink);
+    background: transparent;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .ctrl-btn:hover {
+    background: var(--color-chalk);
+    border-color: var(--color-ink);
+  }
+  .lang-btn {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+  /* Sun/moon icon switching */
+  [data-theme="dark"] .icon-moon,
+  :root:not([data-theme]) .icon-moon { display: none; }
+  [data-theme="dark"] .icon-sun { display: block; }
+  :root:not([data-theme="dark"]) .icon-sun { display: none; }
+  :root:not([data-theme="dark"]) .icon-moon { display: block; }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .icon-moon { display: none; }
+    :root:not([data-theme="light"]) .icon-sun  { display: block; }
+  }
+
   .nav-cta {
     padding: 0.5rem 1.25rem;
     background: var(--color-marigold);
     color: var(--color-ink) !important;
+    font-family: var(--font-body);
+    font-size: var(--text-small);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     border-radius: 2px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-decoration: none;
+    white-space: nowrap;
   }
-  .nav-cta::after { display: none; }
   .nav-cta:hover {
     transform: translateY(-1px);
     box-shadow: 0 4px 16px rgba(232, 160, 32, 0.35);
   }
+
   .hamburger {
     display: none;
     flex-direction: column;
@@ -168,25 +310,83 @@
     transition: color 0.2s ease;
   }
   .mobile-link:hover { color: var(--color-marigold); }
+  .mobile-controls {
+    margin-top: var(--space-12);
+    display: flex;
+    gap: var(--space-4);
+    align-items: center;
+  }
+  .mobile-ctrl {
+    color: var(--color-cream);
+    border-color: rgba(237, 232, 224, 0.3);
+    width: auto;
+    padding: 0.5rem 1rem;
+    border-radius: 2px;
+    font-size: var(--text-small);
+    font-weight: 500;
+  }
+  .mobile-ctrl:hover {
+    background: rgba(237, 232, 224, 0.1);
+    border-color: rgba(237, 232, 224, 0.6);
+  }
+  .mobile-ctrl .icon-sun,
+  .mobile-ctrl .icon-moon { display: none; }
 
   @media (max-width: 768px) {
     nav { display: none; }
+    .nav-controls { display: none; }
     .hamburger { display: flex; }
   }
 </style>
 
 <script>
-  const navbar  = document.getElementById('navbar')!
-  const burger  = document.getElementById('hamburger')!
+  const navbar    = document.getElementById('navbar')!
+  const burger    = document.getElementById('hamburger')!
   const mobileNav = document.getElementById('mobile-nav')!
   const closeBtn  = document.getElementById('mobile-close')!
+  const langBtn   = document.getElementById('lang-toggle')!
+  const themeBtn  = document.getElementById('theme-toggle')!
+  const langBtnM  = document.getElementById('lang-toggle-mobile')!
+  const themeBtnM = document.getElementById('theme-toggle-mobile')!
 
-  // Sticky scroll
+  // ── Sticky scroll ──────────────────────────────
   window.addEventListener('scroll', () => {
     navbar.classList.toggle('scrolled', window.scrollY > 80)
   }, { passive: true })
 
-  // Hamburger
+  // ── Language toggle ────────────────────────────
+  function applyLang(lang: string) {
+    document.documentElement.lang = lang
+    localStorage.setItem('fwn-lang', lang)
+    const isFr = lang === 'fr'
+    langBtn?.setAttribute('aria-label', isFr ? 'Switch to English' : 'Passer en français')
+  }
+
+  function toggleLang() {
+    applyLang(document.documentElement.lang === 'fr' ? 'en-CA' : 'fr')
+  }
+
+  langBtn?.addEventListener('click', toggleLang)
+  langBtnM?.addEventListener('click', toggleLang)
+
+  // ── Dark mode toggle ───────────────────────────
+  function applyTheme(theme: string) {
+    document.documentElement.setAttribute('data-theme', theme)
+    localStorage.setItem('fwn-theme', theme)
+    const isDark = theme === 'dark'
+    themeBtn?.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode')
+    themeBtnM?.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode')
+  }
+
+  function toggleTheme() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    applyTheme(isDark ? 'light' : 'dark')
+  }
+
+  themeBtn?.addEventListener('click', toggleTheme)
+  themeBtnM?.addEventListener('click', toggleTheme)
+
+  // ── Hamburger ──────────────────────────────────
   burger.addEventListener('click', () => {
     const open = mobileNav.hidden === false
     mobileNav.hidden = open
@@ -197,8 +397,6 @@
     burger.setAttribute('aria-expanded', 'false')
     burger.focus()
   })
-
-  // Close on link click or Escape
   mobileNav.querySelectorAll('.mobile-link').forEach(link => {
     link.addEventListener('click', () => {
       mobileNav.hidden = true

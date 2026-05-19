@@ -3,25 +3,32 @@ const testimonials = [
   {
     quote: "My daughter used to groan every time I mentioned tutoring. After two sessions with Naya, she was asking when her next French lesson was. That's never happened before.",
     name: "Sarah M.",
-    detail: "Parent of a Grade 2 student"
+    detailEn: "Parent of a Grade 2 student",
+    detailFr: "Parent d'un élève de 2e année"
   },
   {
     quote: "Naya has a real gift with kids. My son is 6 and his attention span is about four minutes — somehow she keeps him engaged for the full half hour. His teacher noticed the improvement.",
     name: "James T.",
-    detail: "Parent of a JK student"
+    detailEn: "Parent of a JK student",
+    detailFr: "Parent d'un élève en maternelle"
   },
   {
     quote: "We tried a big tutoring centre first. It felt like a factory. Naya actually knows my daughter's name, her favourite stories, what makes her laugh. That makes all the difference.",
     name: "Priya K.",
-    detail: "Parent of a Grade 4 student"
+    detailEn: "Parent of a Grade 4 student",
+    detailFr: "Parent d'un élève de 4e année"
   }
 ]
 ---
 <section id="testimonials" class="testimonials-section" aria-labelledby="testimonials-heading">
   <div class="container">
-    <p class="chapter-label">What Parents Say</p>
+    <p class="chapter-label">
+      <span class="t-en">What Parents Say</span>
+      <span class="t-fr">Ce que disent les parents</span>
+    </p>
     <h2 id="testimonials-heading" class="chapter-title" data-reveal>
-      Real words from real parents.
+      <span class="t-en">Real words from real parents.</span>
+      <span class="t-fr">Les mots de vrais parents.</span>
     </h2>
 
     <div class="testimonials-list" role="list">
@@ -36,7 +43,8 @@ const testimonials = [
           </blockquote>
           <figcaption class="testimonial-meta">
             <span class="testimonial-name">{t.name}</span>
-            <span class="testimonial-detail">{t.detail}</span>
+            <span class="testimonial-detail t-en">{t.detailEn}</span>
+            <span class="testimonial-detail t-fr">{t.detailFr}</span>
           </figcaption>
         </figure>
       ))}
@@ -108,7 +116,7 @@ const testimonials = [
   .testimonial-detail {
     font-family: var(--font-body);
     font-size: var(--text-small);
-    color: rgba(26, 23, 20, 0.55);
+    color: rgba(var(--color-ink-rgb), 0.55);
   }
 
   @media (max-width: 768px) {

@@ -7,6 +7,7 @@
   /* Colors */
   --color-cream:      #FAF7F2;
   --color-ink:        #1A1714;
+  --color-ink-rgb:    26, 23, 20;   /* for rgba() usage */
   --color-marigold:   #E8A020;
   --color-cornflower: #4A7FC1;
   --color-moss:       #5C8B5A;
@@ -45,6 +46,40 @@
   --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
   --ease-inout:  cubic-bezier(0.56, 0, 0.35, 0.98);
 }
+
+/* ── Dark mode ──────────────────────────────────── */
+/* Applied via JS toggle + system preference fallback */
+
+[data-theme="dark"] {
+  --color-cream:      #1C1914;
+  --color-ink:        #EDE8E0;
+  --color-ink-rgb:    237, 232, 224;
+  --color-chalk:      #2A2520;
+  --color-deep:       #0E0C0A;
+  --color-peach:      #3A2B1E;
+  --color-border:     rgba(237, 232, 224, 0.12);
+  --color-sky:        #1E2D3D;
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-cream:      #1C1914;
+    --color-ink:        #EDE8E0;
+    --color-ink-rgb:    237, 232, 224;
+    --color-chalk:      #2A2520;
+    --color-deep:       #0E0C0A;
+    --color-peach:      #3A2B1E;
+    --color-border:     rgba(237, 232, 224, 0.12);
+    --color-sky:        #1E2D3D;
+    color-scheme: dark;
+  }
+}
+
+/* ── Bilingual toggle ───────────────────────────── */
+/* .t-en / .t-fr wrappers — only one visible at a time */
+html:not([lang="fr"]) .t-fr { display: none; }
+html[lang="fr"]       .t-en { display: none; }
 
 /* Reset */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }

@@ -46,6 +46,20 @@ const jsonLd = {
 <!doctype html>
 <html lang="en-CA">
 <head>
+  <!-- Inline theme + lang init: runs before first paint to prevent FOUC -->
+  <script is:inline>
+    (function () {
+      var t = localStorage.getItem('fwn-theme')
+      var l = localStorage.getItem('fwn-lang')
+      if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.setAttribute('data-theme', 'dark')
+      } else if (t === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light')
+      }
+      if (l === 'fr') document.documentElement.lang = 'fr'
+    })()
+  </script>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 

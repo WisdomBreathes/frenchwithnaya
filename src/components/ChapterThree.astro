@@ -2,14 +2,26 @@
 ---
 <section id="meet-naya" class="chapter-three" aria-labelledby="ch3-heading">
   <div class="container">
-    <p class="chapter-label">Meet Naya</p>
+    <p class="chapter-label">
+      <span class="t-en">Meet Naya</span>
+      <span class="t-fr">Rencontrez Naya</span>
+    </p>
 
     <div class="ch3-grid">
       <!-- Photo side -->
       <div class="ch3-photo-col" aria-hidden="true">
         <div class="ch3-photo-frame">
           <div class="ch3-photo-circle">
-            <span class="photo-initial">N</span>
+            <picture>
+              <source type="image/webp"
+                srcset="/frenchwithnaya/images/naya-about-800w.webp 800w, /frenchwithnaya/images/naya-about-1400w.webp 1400w"
+                sizes="clamp(240px, 28vw, 420px)" />
+              <img src="/frenchwithnaya/images/naya-about-800w.webp"
+                alt="Naya in Paris"
+                width="800" height="450"
+                loading="lazy"
+                style="width:100%;height:100%;object-fit:cover;object-position:center top;" />
+            </picture>
           </div>
           <!-- Decorative accent -->
           <div class="photo-accent"></div>
@@ -19,30 +31,36 @@
       <!-- Text side -->
       <div class="ch3-text-col">
         <h2 id="ch3-heading" class="ch3-title" data-reveal>
-          She learned French out of pure love for it. Now she passes that on.
+          <span class="t-en">She learned French out of pure love for it. Now she passes that on.</span>
+          <span class="t-fr">Elle a appris le français par pure passion. Aujourd'hui, elle le transmet.</span>
         </h2>
 
         <blockquote class="ch3-quote" data-reveal>
-          <p>"Every child learns differently. My job is to figure out how your child thinks — and then teach French in a way that actually makes sense to them."</p>
+          <p class="t-en">"Every child learns differently. My job is to figure out how your child thinks — and then teach French in a way that actually makes sense to them."</p>
+          <p class="t-fr">« Chaque enfant apprend différemment. Mon rôle, c'est de comprendre comment votre enfant pense, puis de lui enseigner le français d'une façon qui lui parle vraiment. »</p>
           <cite>— Naya</cite>
         </blockquote>
 
         <div class="ch3-credentials" data-reveal>
           <div class="credential">
             <span class="credential-dot" aria-hidden="true"></span>
-            <p>Science-educated — she brings genuine structure and method to every lesson, not just enthusiasm</p>
+            <p class="t-en">Science-educated. She brings genuine structure and method to every lesson, not just enthusiasm for the subject.</p>
+            <p class="t-fr">Formée en sciences. Elle apporte une vraie structure et une vraie méthode à chaque cours, pas seulement de l'enthousiasme.</p>
           </div>
           <div class="credential">
             <span class="credential-dot" aria-hidden="true"></span>
-            <p>Fell in love with French at a young age and pursued it with real dedication — she knows firsthand what it takes to learn it</p>
+            <p class="t-en">Fell in love with French young and pursued it seriously. She knows firsthand what it actually takes to learn it.</p>
+            <p class="t-fr">Tombée amoureuse du français très tôt et l'a poursuivi sérieusement. Elle sait par expérience ce qu'il faut vraiment pour l'apprendre.</p>
           </div>
           <div class="credential">
             <span class="credential-dot" aria-hidden="true"></span>
-            <p>Fluent in both English and French — she switches between them as needed so your child is never lost</p>
+            <p class="t-en">Fluent in English and French, switching between them as needed so your child is never lost.</p>
+            <p class="t-fr">Parfaitement bilingue, elle passe de l'anglais au français selon les besoins pour que votre enfant ne soit jamais perdu.</p>
           </div>
           <div class="credential">
             <span class="credential-dot" aria-hidden="true"></span>
-            <p>Strong background in communication — patient, clear, and genuinely good at reading what a child needs in the moment</p>
+            <p class="t-en">Patient and clear, with a strong background in communication. She's genuinely good at reading what a child needs in the moment.</p>
+            <p class="t-fr">Patiente et claire, avec un solide bagage en communication. Elle sait instinctivement ce dont un enfant a besoin sur le moment.</p>
           </div>
         </div>
 
@@ -53,7 +71,8 @@
             rel="noopener noreferrer"
             class="btn-primary"
           >
-            Book time with Naya
+            <span class="t-en">Book time with Naya</span>
+            <span class="t-fr">Réserver un cours avec Naya</span>
           </a>
         </div>
       </div>
@@ -97,20 +116,9 @@
     height: clamp(240px, 28vw, 420px);
     border-radius: 50%;
     background: var(--color-peach);
-    display: flex;
-    align-items: center;
-    justify-content: center;
     overflow: hidden;
     position: relative;
     z-index: 1;
-  }
-  .photo-initial {
-    font-family: var(--font-display);
-    font-style: italic;
-    font-size: clamp(6rem, 10vw, 10rem);
-    color: var(--color-marigold);
-    font-weight: 700;
-    line-height: 1;
   }
   .photo-accent {
     position: absolute;
@@ -151,7 +159,7 @@
     font-family: var(--font-body);
     font-size: var(--text-small);
     font-weight: 500;
-    color: rgba(26, 23, 20, 0.55);
+    color: rgba(var(--color-ink-rgb), 0.55);
     font-style: normal;
   }
   .ch3-credentials {
@@ -175,7 +183,7 @@
   .credential p {
     font-family: var(--font-body);
     font-size: var(--text-body);
-    color: rgba(26, 23, 20, 0.75);
+    color: rgba(var(--color-ink-rgb), 0.75);
     line-height: 1.65;
   }
   .btn-primary {

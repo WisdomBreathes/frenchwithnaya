@@ -3,15 +3,27 @@
 <section id="book" class="booking-section" aria-labelledby="booking-heading">
   <div class="container">
     <div class="booking-header" data-reveal>
-      <p class="chapter-label-light">Let's Get Started</p>
-      <h2 id="booking-heading" class="booking-title">Ready to book?</h2>
-      <p class="booking-sub">Free intro call. No commitment. Just a chance to meet Naya and see if it's the right fit.</p>
+      <p class="chapter-label-light">
+        <span class="t-en">Let's Get Started</span>
+        <span class="t-fr">Commençons</span>
+      </p>
+      <h2 id="booking-heading" class="booking-title">
+        <span class="t-en">Ready to book?</span>
+        <span class="t-fr">Prêt à vous lancer ?</span>
+      </h2>
+      <p class="booking-sub">
+        <span class="t-en">Free intro call. No commitment. Just a chance to meet Naya and see if it's the right fit.</span>
+        <span class="t-fr">Appel de découverte gratuit. Sans engagement. Juste l'occasion de rencontrer Naya et de voir si c'est fait pour vous.</span>
+      </p>
     </div>
 
     <div class="booking-grid">
       <!-- Cal.com embed -->
       <div class="booking-cal" data-reveal>
-        <h3 class="booking-col-title">Book a call directly</h3>
+        <h3 class="booking-col-title">
+          <span class="t-en">Book a call directly</span>
+          <span class="t-fr">Réserver directement</span>
+        </h3>
         <div
           class="cal-embed-wrap"
           data-cal-link="naya-831b2r/30min"
@@ -20,13 +32,17 @@
           aria-label="Cal.com booking calendar"
         ></div>
         <p class="cal-fallback">
-          Can't see the calendar?
+          <span class="t-en">Can't see the calendar?</span>
+          <span class="t-fr">Vous ne voyez pas le calendrier ?</span>
           <a
             href="https://cal.com/naya-831b2r/30min"
             target="_blank"
             rel="noopener noreferrer"
             class="cal-fallback-link"
-          >Book directly on Cal.com →</a>
+          >
+            <span class="t-en">Book directly on Cal.com →</span>
+            <span class="t-fr">Réserver sur Cal.com →</span>
+          </a>
         </p>
       </div>
 
@@ -39,7 +55,10 @@
 
       <!-- Web3Forms contact form -->
       <div class="booking-form" data-reveal>
-        <h3 class="booking-col-title">Send a message</h3>
+        <h3 class="booking-col-title">
+          <span class="t-en">Send a message</span>
+          <span class="t-fr">Envoyer un message</span>
+        </h3>
         <form
           id="contact-form"
           method="POST"
@@ -49,7 +68,7 @@
         >
           <!-- Web3Forms config -->
           <input type="hidden" name="access_key" value="9007954b-92d1-4aa3-8e94-59e44a056b67" />
-          <input type="hidden" name="redirect" value="/frenchwithnaya/thank-you/" />
+          <input type="hidden" name="redirect" value="https://wisdombreathes.github.io/frenchwithnaya/thank-you/" />
           <input type="hidden" name="subject" value="New enquiry — French with Naya" />
           <!-- Honeypot -->
           <div style="position:absolute;left:-9999px;top:-9999px;" aria-hidden="true">
@@ -58,7 +77,10 @@
           </div>
 
           <div class="form-group">
-            <label class="form-label" for="name">Your name</label>
+            <label class="form-label" for="name">
+              <span class="t-en">Your name</span>
+              <span class="t-fr">Votre prénom</span>
+            </label>
             <input
               type="text"
               id="name"
@@ -71,7 +93,10 @@
           </div>
 
           <div class="form-group">
-            <label class="form-label" for="email">Email address</label>
+            <label class="form-label" for="email">
+              <span class="t-en">Email address</span>
+              <span class="t-fr">Adresse courriel</span>
+            </label>
             <input
               type="email"
               id="email"
@@ -84,7 +109,10 @@
           </div>
 
           <div class="form-group">
-            <label class="form-label" for="grade">Child's age / grade</label>
+            <label class="form-label" for="grade">
+              <span class="t-en">Child's age / grade</span>
+              <span class="t-fr">Âge / niveau de l'enfant</span>
+            </label>
             <select id="grade" name="grade" class="form-input" required>
               <option value="" disabled selected>Select a grade range</option>
               <option value="JK–Grade 1 (ages 4–6)">JK–Grade 1 (ages 4–6)</option>
@@ -94,7 +122,10 @@
           </div>
 
           <div class="form-group">
-            <label class="form-label" for="message">Your message</label>
+            <label class="form-label" for="message">
+              <span class="t-en">Your message</span>
+              <span class="t-fr">Votre message</span>
+            </label>
             <textarea
               id="message"
               name="message"
@@ -108,11 +139,20 @@
           <div id="form-error" class="form-error" role="alert" aria-live="polite" hidden></div>
 
           <button type="submit" class="btn-submit" id="submit-btn">
-            <span class="btn-label">Send message</span>
-            <span class="btn-loading" hidden aria-hidden="true">Sending…</span>
+            <span class="btn-label">
+              <span class="t-en">Send message</span>
+              <span class="t-fr">Envoyer le message</span>
+            </span>
+            <span class="btn-loading" hidden aria-hidden="true">
+              <span class="t-en">Sending…</span>
+              <span class="t-fr">Envoi en cours…</span>
+            </span>
           </button>
 
-          <p class="form-note">Naya typically replies within one business day.</p>
+          <p class="form-note">
+            <span class="t-en">Naya typically replies within one business day.</span>
+            <span class="t-fr">Naya répond généralement en un jour ouvrable.</span>
+          </p>
         </form>
       </div>
     </div>
@@ -139,7 +179,7 @@
     font-weight: 500;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: rgba(26, 23, 20, 0.6);
+    color: rgba(var(--color-ink-rgb), 0.6);
     margin-bottom: var(--space-4);
   }
   .booking-title {
@@ -154,7 +194,7 @@
   .booking-sub {
     font-family: var(--font-body);
     font-size: var(--text-body);
-    color: rgba(26, 23, 20, 0.75);
+    color: rgba(var(--color-ink-rgb), 0.75);
   }
   .booking-grid {
     display: grid;
@@ -168,7 +208,7 @@
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: rgba(26, 23, 20, 0.6);
+    color: rgba(var(--color-ink-rgb), 0.6);
     margin-bottom: var(--space-6);
   }
   .cal-embed-wrap {
@@ -180,7 +220,7 @@
     margin-top: var(--space-4);
     font-family: var(--font-body);
     font-size: var(--text-small);
-    color: rgba(26, 23, 20, 0.6);
+    color: rgba(var(--color-ink-rgb), 0.6);
     text-align: center;
   }
   .cal-fallback-link {
@@ -200,13 +240,13 @@
   .or-line {
     flex: 1;
     width: 1px;
-    background: rgba(26, 23, 20, 0.2);
+    background: rgba(var(--color-ink-rgb), 0.2);
   }
   .or-text {
     font-family: var(--font-display);
     font-style: italic;
     font-size: 1.25rem;
-    color: rgba(26, 23, 20, 0.5);
+    color: rgba(var(--color-ink-rgb), 0.5);
   }
   /* Form */
   .form-group {
@@ -225,7 +265,7 @@
     width: 100%;
     padding: 0.875rem 1rem;
     background: rgba(255, 255, 255, 0.6);
-    border: 1.5px solid rgba(26, 23, 20, 0.2);
+    border: 1.5px solid rgba(var(--color-ink-rgb), 0.2);
     border-radius: 2px;
     font-family: var(--font-body);
     font-size: 1rem;
@@ -267,13 +307,13 @@
   }
   .btn-submit:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 8px 28px rgba(26, 23, 20, 0.3);
+    box-shadow: 0 8px 28px rgba(var(--color-ink-rgb), 0.3);
   }
   .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
   .form-note {
     font-family: var(--font-body);
     font-size: var(--text-small);
-    color: rgba(26, 23, 20, 0.55);
+    color: rgba(var(--color-ink-rgb), 0.55);
     text-align: center;
   }
 
@@ -357,7 +397,7 @@
       })
       const json = await res.json()
       if (json.success) {
-        window.location.href = '/frenchwithnaya/thank-you/'
+        window.location.href = 'https://wisdombreathes.github.io/frenchwithnaya/thank-you/'
       } else {
         throw new Error(json.message || 'Submission failed')
       }

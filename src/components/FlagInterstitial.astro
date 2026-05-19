@@ -1,9 +1,11 @@
 ---
+import libertePath from '../data/liberte-path.json'
 ---
 <!--
-  Pinned scroll section:
+  Pinned scroll section (250% of viewport height):
   0–40%   → blue/red panels slide in from edges, white fades in
-  35–65%  → "liberté." writes itself left-to-right, pen nib leads
+  35–65%  → "liberté." is drawn stroke-by-stroke (stroke-dashoffset → 0)
+            then fill fades in as the stroke fades out
   70–100% → everything fades back to cream
 -->
 <section class="flag-section" aria-hidden="true">
@@ -12,14 +14,36 @@
     <div class="flag-panel flag-white"></div>
     <div class="flag-panel flag-red"></div>
 
-    <!-- Text with writing reveal -->
+    <!-- Handwritten text via SVG stroke animation -->
     <div class="flag-text-wrap">
-      <p class="flag-text">liberté.</p>
-      <!-- Pen nib that leads the text reveal -->
-      <div class="flag-pen" aria-hidden="true">
-        <div class="pen-nib"></div>
-        <div class="pen-trail"></div>
-      </div>
+      <svg
+        class="liberte-svg"
+        viewBox={libertePath.viewBox}
+        width={libertePath.width}
+        height={libertePath.height}
+        xmlns="http://www.w3.org/2000/svg"
+        aria-label="liberté."
+        role="img"
+      >
+        <!-- Fill layer — fades in after stroke completes -->
+        <path
+          class="liberte-fill"
+          d={libertePath.pathD}
+          fill="var(--color-ink)"
+          stroke="none"
+          opacity="0"
+        />
+        <!-- Stroke layer — drawn left-to-right by dashoffset animation -->
+        <path
+          class="liberte-stroke"
+          d={libertePath.pathD}
+          fill="none"
+          stroke="var(--color-ink)"
+          stroke-width="3"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
     </div>
   </div>
 </section>
@@ -46,7 +70,6 @@
   .flag-white { background: #F5F0E8; }
   .flag-red   { background: #ED2939; }
 
-  /* Text container — centered, same size as the text */
   .flag-text-wrap {
     position: absolute;
     inset: 0;
@@ -56,43 +79,18 @@
     pointer-events: none;
   }
 
-  .flag-text {
-    font-family: var(--font-display);
-    font-style: italic;
-    font-weight: 300;
-    font-size: clamp(4rem, 12vw, 10rem);
-    color: var(--color-ink);
-    letter-spacing: -0.03em;
-    white-space: nowrap;
-    /* Hidden behind a clip — reveals left to right */
-    clip-path: inset(0 100% 0 0);
-    position: relative;
+  .liberte-svg {
+    /* Scales to fill available width while keeping aspect ratio */
+    width: clamp(320px, 70vw, 700px);
+    height: auto;
+    overflow: visible;
+    opacity: 0;   /* JS fades this in with the flag */
   }
 
-  /* Pen nib */
-  .flag-pen {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    opacity: 0;
-    /* JS will position and move this */
-    pointer-events: none;
-  }
-  .pen-nib {
-    width: 2px;
-    height: clamp(3rem, 8vw, 7rem);
-    background: var(--color-ink);
-    border-radius: 0 0 2px 2px;
-    opacity: 0.6;
-  }
-  .pen-trail {
-    width: 2px;
-    height: clamp(1rem, 3vw, 2.5rem);
-    background: linear-gradient(to bottom, rgba(26,23,20,0.3), transparent);
-    margin-top: 2px;
+  /* stroke-dasharray / dashoffset set by JS once path length is measured */
+  .liberte-stroke {
+    stroke-dasharray: var(--path-len, 99999);
+    stroke-dashoffset: var(--path-len, 99999);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -110,33 +108,29 @@
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (prefersReduced) return
 
-    const section = document.querySelector('.flag-section') as HTMLElement
-    const wrapper = document.querySelector('.flag-wrapper') as HTMLElement
-    const blue    = document.querySelector('.flag-blue') as HTMLElement
-    const red     = document.querySelector('.flag-red') as HTMLElement
-    const white   = document.querySelector('.flag-white') as HTMLElement
-    const text    = document.querySelector('.flag-text') as HTMLElement
-    const pen     = document.querySelector('.flag-pen') as HTMLElement
+    const section  = document.querySelector('.flag-section') as HTMLElement
+    const wrapper  = document.querySelector('.flag-wrapper') as HTMLElement
+    const blue     = document.querySelector('.flag-blue') as HTMLElement
+    const red      = document.querySelector('.flag-red') as HTMLElement
+    const white    = document.querySelector('.flag-white') as HTMLElement
+    const svg      = document.querySelector('.liberte-svg') as SVGSVGElement
+    const stroke   = document.querySelector('.liberte-stroke') as SVGPathElement
+    const fill     = document.querySelector('.liberte-fill') as SVGPathElement
 
-    if (!section || !wrapper || !text || !pen) return
+    if (!section || !wrapper || !svg || !stroke || !fill) return
 
-    // Measure where the text sits so we can track the pen across it
-    function getPenRange() {
-      const textRect = text.getBoundingClientRect()
-      const sectionRect = section.getBoundingClientRect()
-      // left and right edges of the text, relative to the section
-      return {
-        left:  textRect.left - sectionRect.left,
-        right: textRect.right - sectionRect.left,
-      }
-    }
+    // Measure total stroke path length so we can animate dashoffset
+    const pathLen = stroke.getTotalLength()
+    stroke.style.setProperty('--path-len', String(Math.ceil(pathLen)))
+    stroke.style.strokeDasharray = String(Math.ceil(pathLen))
+    stroke.style.strokeDashoffset = String(Math.ceil(pathLen))
 
     // Initial states
-    gsap.set(blue,  { xPercent: -100 })
-    gsap.set(red,   { xPercent: 100 })
-    gsap.set(white, { opacity: 0 })
-    gsap.set(text,  { clipPath: 'inset(0 100% 0 0)' })
-    gsap.set(pen,   { opacity: 0 })
+    gsap.set(blue,   { xPercent: -100 })
+    gsap.set(red,    { xPercent:  100 })
+    gsap.set(white,  { opacity: 0 })
+    gsap.set(svg,    { opacity: 0 })
+    gsap.set(fill,   { opacity: 0 })
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -146,43 +140,33 @@
         pin: true,
         scrub: 0.8,
         anticipatePin: 1,
-        onRefresh: () => {
-          // Reposition pen start on resize
-          const range = getPenRange()
-          gsap.set(pen, { left: range.left })
-        }
       }
     })
 
-    const range = getPenRange()
-
     tl
-      // Phase 1 — flag assembles (0 → 0.4)
+      // Phase 1 — flag assembles (0 → 0.40)
       .to(blue,  { xPercent: 0, ease: 'power2.out' }, 0)
       .to(red,   { xPercent: 0, ease: 'power2.out' }, 0)
       .to(white, { opacity: 1, ease: 'power2.out' }, 0)
 
-      // Phase 2 — pen appears at left edge of text (0.33)
-      .to(pen, { opacity: 1, duration: 0.02 }, 0.33)
+      // SVG container fades in just before writing starts
+      .to(svg, { opacity: 1, duration: 0.04 }, 0.30)
 
-      // Phase 2b — text clips in left-to-right AND pen moves with it (0.33 → 0.62)
-      .to(text, {
-        clipPath: 'inset(0 0% 0 0)',
-        ease: 'none',
-      }, 0.33)
-      .fromTo(pen, {
-        left: range.left,
-      }, {
-        left: range.right,
+      // Phase 2 — stroke draws itself left→right (0.33 → 0.63)
+      .to(stroke, {
+        strokeDashoffset: 0,
         ease: 'none',
       }, 0.33)
 
-      // Pen fades out as writing finishes (0.62 → 0.66)
-      .to(pen, { opacity: 0, duration: 0.04 }, 0.62)
+      // Phase 2b — fill fades in as stroke reaches the end (0.58 → 0.66)
+      .to(fill, { opacity: 1, ease: 'power2.in', duration: 0.08 }, 0.58)
 
-      // Phase 3 — hold (implicit)
+      // Stroke fades out once fill is solid (0.62 → 0.68)
+      .to(stroke, { opacity: 0, ease: 'power2.in', duration: 0.06 }, 0.62)
 
-      // Phase 4 — fade to cream (0.72 → 1.0)
-      .to(wrapper, { opacity: 0, ease: 'power2.inOut' }, 0.72)
+      // Phase 3 — hold (implicit gap)
+
+      // Phase 4 — fade everything back to cream (0.74 → 1.0)
+      .to(wrapper, { opacity: 0, ease: 'power2.inOut' }, 0.74)
   })
 </script>

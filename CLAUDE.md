@@ -54,6 +54,14 @@ These will be rejected. Do not use them.
 
 6. **3-column feature grids** — three cards side by side each explaining a feature with an icon. Use a different layout: a numbered list, a horizontal scroll panel, a large typographic statement.
 
+7. **Em-dash overuse** — using " — " repeatedly in the pattern "X — Y" or "X — Y — Z" is one of the most immediately recognizable AI copy fingerprints. It reads as a writing tic, not a human voice. Rules:
+   - Maximum one em-dash per paragraph
+   - Prefer restructuring the sentence instead: use a period, a comma, or rewrite as two sentences
+   - Never use em-dash as a substitute for "because", "so", "which", or "and"
+   - Audit all copy before shipping: grep for " — " and question every instance
+   Bad: "Science-educated — she brings structure — and method — to every lesson"
+   Good: "Science-educated. She brings genuine structure and method to every lesson."
+
 ### What This Site Should Feel Like
 A well-designed personal brand site — editorial, literary, warm. The typography does the heavy lifting. White space is deliberate. Animations feel like a considered choreography, not a plugin demo. Scroll through it and it should feel like turning pages, not clicking through a funnel.
 
