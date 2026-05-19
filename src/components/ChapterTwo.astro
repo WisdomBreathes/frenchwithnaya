@@ -254,8 +254,10 @@
     padding: 0 clamp(1.5rem, 5vw, 4rem);
   }
 
-  /* Tablet: scroll with snap */
+  /* Tablet/mobile: native horizontal scroll with snap */
   @media (max-width: 900px) {
+    .chapter-two { overflow: visible; }
+    .cards-scroll-wrap { overflow: hidden; }
     .cards-track {
       display: flex;
       overflow-x: auto;
@@ -263,20 +265,27 @@
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
       gap: 1rem;
-      padding: 0 clamp(1.5rem, 5vw, 4rem);
+      /* leading padding aligns first card with page margin */
+      padding: 0.25rem clamp(1.5rem, 5vw, 4rem);
+      /* trailing padding lets last card breathe before edge */
       padding-right: clamp(3rem, 10vw, 6rem);
       max-width: none;
+      /* snap origin matches leading padding */
+      scroll-padding-left: clamp(1.5rem, 5vw, 4rem);
     }
     .cards-track::-webkit-scrollbar { display: none; }
     .age-card {
-      flex: 0 0 min(85vw, 360px);
+      flex: 0 0 min(80vw, 340px);
       scroll-snap-align: start;
     }
     .scroll-hint { display: block; }
   }
 
   @media (max-width: 480px) {
-    .age-card { flex: 0 0 88vw; }
+    .age-card {
+      /* fills viewport minus the leading padding on both sides */
+      flex: 0 0 calc(100vw - clamp(3rem, 10vw, 8rem));
+    }
   }
 </style>
 
