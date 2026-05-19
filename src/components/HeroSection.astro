@@ -112,7 +112,7 @@
     line-height: 1.05;
     letter-spacing: -0.03em;
     margin-bottom: var(--space-8);
-    overflow: hidden;
+    overflow: visible;
   }
   .hero-sub {
     font-family: var(--font-body);
@@ -217,12 +217,11 @@
     gsap.set(heroEls, { opacity: 0, y: 16 })
     gsap.set('.hero-headline', { opacity: 0 })
 
-    // SplitText: must run after Fraunces is loaded — fallback font metrics are wrong.
     const headline = document.querySelector('.hero-headline') as HTMLElement
     if (headline) {
-      gsap.set(headline, { opacity: 1 }) // show container so SplitText can measure
+      gsap.set(headline, { opacity: 1 })
       document.fonts.ready.then(() => {
-        SplitText.create('.hero-headline', {
+        SplitText.create(headline, {
           type: 'lines,words',
           autoSplit: true,
           onSplit(self: any) {
@@ -232,7 +231,7 @@
               duration: 0.9,
               stagger: 0.04,
               ease: 'power3.out',
-              clearProps: 'all'
+              clearProps: 'opacity,transform,yPercent'
             })
           }
         })

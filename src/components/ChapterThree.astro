@@ -204,13 +204,12 @@
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (prefersReduced) return
 
-    // ch3-title does NOT use [data-reveal] — it owns its full entrance via SplitText.
-    // fonts.ready ensures Fraunces is loaded before SplitText measures line positions.
-    // If SplitText runs with the fallback font, line breaks are wrong and text
-    // overflows its containers when Fraunces swaps in.
     const titleEl = document.querySelector<HTMLElement>('.ch3-title')
     if (titleEl) {
       gsap.set(titleEl, { opacity: 0 })
+      const titleSafetyTimer = window.setTimeout(() => {
+        gsap.set(titleEl, { clearProps: 'all' })
+      }, 5000)
       document.fonts.ready.then(() => {
         const split = SplitText.create(titleEl, { type: 'lines', autoSplit: true })
         gsap.from(split.lines, {
@@ -219,12 +218,15 @@
           duration: 0.7,
           stagger: 0.12,
           ease: 'power3.out',
-          clearProps: 'all',
+          clearProps: 'opacity,transform',
           scrollTrigger: {
             trigger: titleEl,
             start: 'top 80%',
             once: true,
-            onEnter: () => gsap.set(titleEl, { opacity: 1 })
+            onEnter: () => {
+              window.clearTimeout(titleSafetyTimer)
+              gsap.set(titleEl, { opacity: 1 })
+            }
           }
         })
       })

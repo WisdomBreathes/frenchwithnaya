@@ -234,11 +234,6 @@
   :root:not([data-theme="dark"]) .icon-sun { display: none; }
   :root:not([data-theme="dark"]) .icon-moon { display: block; }
 
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) .icon-moon { display: none; }
-    :root:not([data-theme="light"]) .icon-sun  { display: block; }
-  }
-
   .nav-cta {
     padding: 0.5rem 1.25rem;
     background: var(--color-marigold);
@@ -419,8 +414,6 @@
 
   // Initialise mobile button to match current theme on load
   const initDark = document.documentElement.getAttribute('data-theme') === 'dark'
-    || (!document.documentElement.hasAttribute('data-theme')
-        && window.matchMedia('(prefers-color-scheme: dark)').matches)
   setMobileThemeBtn(initDark)
 
   function toggleTheme() {

@@ -53,7 +53,7 @@ const jsonLd = {
     (function () {
       var t = localStorage.getItem('fwn-theme')
       var l = localStorage.getItem('fwn-lang')
-      if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      if (t === 'dark') {
         document.documentElement.setAttribute('data-theme', 'dark')
       } else if (t === 'light') {
         document.documentElement.setAttribute('data-theme', 'light')
@@ -110,31 +110,6 @@ const jsonLd = {
     @keyframes fade-out { from { opacity: 1; } to { opacity: 0; } }
     @keyframes fade-in  { from { opacity: 0; } to { opacity: 1; } }
 
-    /* Custom cursor */
-    .cursor {
-      position: fixed;
-      width: 10px; height: 10px;
-      background: var(--color-marigold);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 9999;
-      transform: translate(-50%, -50%);
-      transition: width 0.2s ease, height 0.2s ease, opacity 0.2s ease;
-    }
-    .cursor-ring {
-      position: fixed;
-      width: 34px; height: 34px;
-      border: 1.5px solid var(--color-marigold);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 9998;
-      transform: translate(-50%, -50%);
-      opacity: 0.5;
-    }
-    @media (hover: none) {
-      .cursor, .cursor-ring { display: none; }
-    }
-
     /* Skip link */
     .skip-link {
       position: absolute;
@@ -155,36 +130,7 @@ const jsonLd = {
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to main content</a>
-  <div class="cursor" aria-hidden="true"></div>
-  <div class="cursor-ring" aria-hidden="true"></div>
 
   <slot />
-
-  <script>
-    // Custom cursor
-    const cursor = document.querySelector('.cursor') as HTMLElement
-    const ring = document.querySelector('.cursor-ring') as HTMLElement
-    if (cursor && ring) {
-      let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0
-      document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX
-        mouseY = e.clientY
-        cursor.style.left = mouseX + 'px'
-        cursor.style.top = mouseY + 'px'
-      })
-      function animateRing() {
-        ringX += (mouseX - ringX) * 0.1
-        ringY += (mouseY - ringY) * 0.1
-        ring.style.left = ringX + 'px'
-        ring.style.top = ringY + 'px'
-        requestAnimationFrame(animateRing)
-      }
-      animateRing()
-      // Hide dot over interactive elements — delegation handles dynamically added elements (e.g. Cal.com)
-      document.addEventListener('mouseover', (e) => {
-        cursor.style.opacity = (e.target as Element).closest?.('a, button, [role="button"]') ? '0' : '1'
-      })
-    }
-  </script>
 </body>
 </html>
