@@ -16,28 +16,53 @@
       lenis.on('scroll', ScrollTrigger.update)
       gsap.ticker.add((time) => { lenis.raf(time * 1000) })
       gsap.ticker.lagSmoothing(0)
-
-      // Recalculate all trigger positions now that Lenis owns the scroll container.
-      // Without this, ScrollTrigger measures against native scroll — wrong values.
+      // If the page loaded at a non-zero scroll position (hash link, scroll restoration),
+      // Lenis starts at 0 and lerps toward it. Jump it there immediately so
+      // ScrollTrigger sees the correct position from the first refresh.
+      if (window.scrollY > 0) {
+        lenis.scrollTo(window.scrollY, { immediate: true })
+      }
       ScrollTrigger.refresh()
     }
 
     // ── Safety net ─────────────────────────────────────────────────────────
-    // If animations fail to initialise for any reason (GSAP error, slow network,
-    // blocked scripts), reveal all [data-reveal] elements after 5s so the page
-    // is never permanently blank.
+    // If initScrollAnimations never runs (JS error, preloader stall, etc.),
+    // clear any GSAP-set hidden state after 5s so content is never stuck invisible.
+    // Since CSS no longer hides [data-reveal] elements, clearProps:'all' returns
+    // them to their natural visible state immediately.
     const safetyTimer = setTimeout(() => {
       document.querySelectorAll<HTMLElement>('[data-reveal]').forEach(el => {
-        el.style.opacity = '1'
-        el.style.transform = 'none'
+        gsap.set(el, { clearProps: 'all' })
       })
+      // Also clear hero elements in case initHeroAnimations stalled
+      const heroEls = document.querySelectorAll<HTMLElement>('.hero-eyebrow, .hero-sub, .hero-headline, .hero-content .btn-primary')
+      heroEls.forEach(el => gsap.set(el, { clearProps: 'all' }))
     }, 5000)
 
     // ── Scroll reveal batch ────────────────────────────────────────────────
     function initScrollAnimations() {
-      clearTimeout(safetyTimer) // animations are running — safety net not needed
+      clearTimeout(safetyTimer)
 
       if (prefersReduced) return
+      // prefersReduced users: no gsap.set(), so [data-reveal] elements are
+      // naturally visible — nothing to do.
+
+      // Snapshot which elements are already in (or above) the viewport BEFORE
+      // gsap.set hides everything. getBoundingClientRect is accurate at this
+      // moment because nothing has been transformed yet.
+      // This handles hash navigation, scroll restoration, and back-button loads
+      // where initScrollAnimations fires with the page already scrolled mid-way.
+      const threshold = window.innerHeight * 0.85
+      const alreadyInView: HTMLElement[] = []
+      document.querySelectorAll<HTMLElement>('[data-reveal]').forEach(el => {
+        if (el.getBoundingClientRect().top < threshold) {
+          alreadyInView.push(el)
+        }
+      })
+
+      // GSAP owns the hidden initial state — NOT CSS.
+      // Called here (after preloader covers the page) so there is no flash.
+      gsap.set('[data-reveal]', { opacity: 0, y: 40 })
 
       ScrollTrigger.batch('[data-reveal]', {
         onEnter: (batch) => gsap.to(batch, {
@@ -46,28 +71,41 @@
           duration: 0.7,
           ease: 'power3.out',
           stagger: 0.12,
-          clearProps: 'opacity,transform'  // remove inline styles so CSS transitions/hover work after reveal
+          // clearProps:'all' removes every inline style GSAP set.
+          // CSS has no opacity/transform on [data-reveal] elements, so they
+          // land at their natural state and CSS hover/transitions work normally.
+          clearProps: 'all'
         }),
         once: true,
         start: 'top 85%'
       })
 
-      // Refresh again after all resources (Cal.com embed, images) have loaded
-      // and potentially shifted the page layout.
-      window.addEventListener('load', () => {
-        ScrollTrigger.refresh()
-      }, { once: true })
+      // Elements already in (or above) the viewport have been scrolled past —
+      // the user never sees them animate in. Just clear the GSAP-set hidden
+      // state immediately so they're visible at their natural CSS state.
+      if (alreadyInView.length > 0) {
+        gsap.set(alreadyInView, { clearProps: 'all' })
+      }
+
+      // Refresh trigger positions after layout-shifting resources settle
+      // (Cal.com embed, lazy images). Guard: readyState is almost always
+      // 'complete' by the time the preloader calls this function.
+      const doRefresh = () => setTimeout(() => ScrollTrigger.refresh(), 100)
+      if (document.readyState === 'complete') {
+        doRefresh()
+      } else {
+        window.addEventListener('load', doRefresh, { once: true })
+      }
     }
 
-    // Preloader calls window.__initAnimations when it finishes.
-    // Chain our scroll animations into that pipeline.
+    // Chain into the preloader's animation pipeline
     const existing = (window as any).__initAnimations
     ;(window as any).__initAnimations = function() {
       if (typeof existing === 'function') existing()
       initScrollAnimations()
     }
 
-    // Fallback: if there's no preloader on this page, init immediately
+    // Fallback: no preloader on this page — init immediately
     if (!document.getElementById('preloader')) {
       initScrollAnimations()
     }

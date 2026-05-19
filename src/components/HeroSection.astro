@@ -102,8 +102,6 @@
     text-transform: uppercase;
     color: var(--color-marigold);
     margin-bottom: var(--space-6);
-    opacity: 0;
-    transform: translateY(16px);
   }
   .hero-headline {
     font-family: var(--font-display);
@@ -115,7 +113,6 @@
     letter-spacing: -0.03em;
     margin-bottom: var(--space-8);
     overflow: hidden;
-    opacity: 0;
   }
   .hero-sub {
     font-family: var(--font-body);
@@ -124,14 +121,10 @@
     line-height: 1.7;
     margin-bottom: var(--space-12);
     max-width: 520px;
-    opacity: 0;
-    transform: translateY(16px);
   }
-  /* Animation initial state — GSAP reveals this during the hero entrance */
-  .btn-primary {
-    opacity: 0;
-    transform: translateY(16px);
-  }
+  /* No CSS opacity/transform initial states — GSAP owns the animation state entirely.
+     See initHeroAnimations() where gsap.set() establishes hidden state after preloader
+     covers the page, avoiding any flash of content. */
   .hero-photo-wrap {
     position: relative;
     flex-shrink: 0;
@@ -212,21 +205,22 @@
 
   function initHeroAnimations() {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (prefersReduced) {
-      // Scope to hero section only — avoid touching other .btn-primary elements on the page
-      document.querySelectorAll('.hero-eyebrow, .hero-sub, .hero-content .btn-primary').forEach(el => {
-        (el as HTMLElement).style.opacity = '1';
-        (el as HTMLElement).style.transform = 'none'
-      })
-      return
-    }
+    // With no CSS opacity/transform on hero elements, reduced-motion users see
+    // everything immediately at its natural visible state — no action needed.
+    if (prefersReduced) return
 
-    // SplitText measures line/word positions — must run after Fraunces has loaded.
-    // If it runs with the fallback font, measurements are wrong and text bleeds its
-    // containers when the real font swaps in.
+    // GSAP owns the initial hidden state — NOT CSS.
+    // This runs while the preloader is covering the page, so there is no flash.
+    // clearProps:'all' at the end of each animation hands full control back to CSS
+    // so hover effects, transitions, and media queries all work normally after.
+    const heroEls = ['.hero-eyebrow', '.hero-sub', '.hero-content .btn-primary']
+    gsap.set(heroEls, { opacity: 0, y: 16 })
+    gsap.set('.hero-headline', { opacity: 0 })
+
+    // SplitText: must run after Fraunces is loaded — fallback font metrics are wrong.
     const headline = document.querySelector('.hero-headline') as HTMLElement
     if (headline) {
-      headline.style.opacity = '1'
+      gsap.set(headline, { opacity: 1 }) // show container so SplitText can measure
       document.fonts.ready.then(() => {
         SplitText.create('.hero-headline', {
           type: 'lines,words',
@@ -238,24 +232,25 @@
               duration: 0.9,
               stagger: 0.04,
               ease: 'power3.out',
-              clearProps: 'opacity,transform,yPercent'
+              clearProps: 'all'
             })
           }
         })
       })
     }
 
-    // Stagger in eyebrow, sub, hero CTA only — do NOT target .btn-primary globally.
-    // A global selector leaves inline transform styles that permanently break hover
-    // effects on every other CTA button further down the page.
-    gsap.to(['.hero-eyebrow', '.hero-sub', '.hero-content .btn-primary'], {
+    // Eyebrow, sub-copy, CTA — staggered entrance.
+    // clearProps:'all' removes every inline style GSAP set, handing control back to
+    // CSS. Since CSS has no opacity/transform on these elements, they land at their
+    // natural visible state and CSS hover works without interference.
+    gsap.to(heroEls, {
       opacity: 1,
       y: 0,
       duration: 0.7,
       stagger: 0.15,
       ease: 'power3.out',
       delay: 0.2,
-      clearProps: 'opacity,transform'  // remove inline styles so CSS hover works normally
+      clearProps: 'all'
     })
 
     // Soft parallax on photo
