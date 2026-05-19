@@ -343,17 +343,9 @@
     border-color: rgba(237, 232, 224, 0.5);
     color: #EDE8E0;
   }
-  /* Theme button icon/label visibility — mirrors desktop logic */
-  [data-theme="dark"] .mob-icon-moon,
-  [data-theme="dark"] .mob-moon-label { display: none; }
-  :root:not([data-theme="dark"]) .mob-icon-sun,
-  :root:not([data-theme="dark"]) .mob-sun-label { display: none; }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) .mob-icon-moon,
-    :root:not([data-theme="light"]) .mob-moon-label { display: none; }
-    :root:not([data-theme="light"]) .mob-icon-sun,
-    :root:not([data-theme="light"]) .mob-sun-label { display: inline; }
-  }
+  /* Mobile theme button state is managed entirely by JS (avoids Astro scope issues) */
+  .mob-icon-sun, .mob-sun-label,
+  .mob-icon-moon, .mob-moon-label { display: none; }
 
   @media (max-width: 768px) {
     /* Only hide the desktop nav — not the nav inside the mobile overlay */
@@ -394,13 +386,37 @@
   langBtnM?.addEventListener('click', toggleLang)
 
   // ── Dark mode toggle ───────────────────────────
+  const mobSunIcon  = themeBtnM?.querySelector<HTMLElement>('.mob-icon-sun')
+  const mobSunLabel = themeBtnM?.querySelector<HTMLElement>('.mob-sun-label')
+  const mobMoonIcon  = themeBtnM?.querySelector<HTMLElement>('.mob-icon-moon')
+  const mobMoonLabel = themeBtnM?.querySelector<HTMLElement>('.mob-moon-label')
+
+  function setMobileThemeBtn(isDark: boolean) {
+    const show = (el: HTMLElement | null | undefined, visible: boolean) => {
+      if (el) el.style.display = visible ? 'inline-flex' : 'none'
+    }
+    // Dark mode active → show sun ("Light" = tap to go light)
+    show(mobSunIcon,   isDark)
+    show(mobSunLabel,  isDark)
+    // Light mode active → show moon ("Dark" = tap to go dark)
+    show(mobMoonIcon,  !isDark)
+    show(mobMoonLabel, !isDark)
+  }
+
   function applyTheme(theme: string) {
     document.documentElement.setAttribute('data-theme', theme)
     localStorage.setItem('fwn-theme', theme)
     const isDark = theme === 'dark'
     themeBtn?.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode')
     themeBtnM?.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode')
+    setMobileThemeBtn(isDark)
   }
+
+  // Initialise mobile button to match current theme on load
+  const initDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    || (!document.documentElement.hasAttribute('data-theme')
+        && window.matchMedia('(prefers-color-scheme: dark)').matches)
+  setMobileThemeBtn(initDark)
 
   function toggleTheme() {
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
