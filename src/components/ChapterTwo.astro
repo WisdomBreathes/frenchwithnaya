@@ -283,33 +283,3 @@
     }
   }
 </style>
-
-<script>
-  import gsap from 'gsap'
-  import ScrollTrigger from 'gsap/ScrollTrigger'
-
-  gsap.registerPlugin(ScrollTrigger)
-
-  document.addEventListener('DOMContentLoaded', () => {
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (prefersReduced) return
-
-    // Skip GSAP card animation on mobile — transforms conflict with snap scroll
-    if (window.innerWidth <= 900) return
-
-    // Stagger cards in on scroll
-    gsap.from('.age-card', {
-      opacity: 0,
-      y: 40,
-      duration: 0.65,
-      ease: 'power3.out',
-      stagger: 0.15,
-      clearProps: 'all',
-      scrollTrigger: {
-        trigger: '.cards-track',
-        start: 'top 80%',
-        once: true
-      }
-    })
-  })
-</script>
