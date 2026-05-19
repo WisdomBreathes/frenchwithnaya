@@ -28,11 +28,11 @@ import ScrollAnimations from '../components/ScrollAnimations.astro'
     <ChapterThree />
     <FlagInterstitial />
     <TestimonialsSection />
-    <!-- cream → marigold -->
-    <div aria-hidden="true" style="height:140px;background:linear-gradient(to bottom,var(--color-cream),var(--color-marigold));margin-top:-1px;"></div>
+    <!-- cream → marigold: tall gradient pulled up into the section's bottom padding -->
+    <div aria-hidden="true" style="height:280px;background:linear-gradient(to bottom,var(--color-cream) 0%,var(--color-cream) 20%,var(--color-marigold) 100%);margin-top:-80px;position:relative;z-index:0;pointer-events:none;"></div>
     <BookingSection />
     <!-- marigold → deep -->
-    <div aria-hidden="true" style="height:140px;background:linear-gradient(to bottom,var(--color-marigold),var(--color-deep));margin-top:-1px;"></div>
+    <div aria-hidden="true" style="height:280px;background:linear-gradient(to bottom,var(--color-marigold) 0%,var(--color-deep) 100%);margin-top:-1px;pointer-events:none;"></div>
   </main>
   <Footer />
 </Layout>
