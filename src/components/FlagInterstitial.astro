@@ -65,6 +65,8 @@ import libertePath from '../data/liberte-path.json'
     flex: 1;
     height: 100%;
     will-change: transform;
+    position: relative;
+    z-index: 1;
   }
   .flag-blue  { background: #002395; }
   .flag-white { background: #F5F0E8; }
@@ -77,6 +79,7 @@ import libertePath from '../data/liberte-path.json'
     align-items: center;
     justify-content: center;
     pointer-events: none;
+    z-index: 2;
   }
 
   .liberte-svg {
@@ -135,35 +138,35 @@ import libertePath from '../data/liberte-path.json'
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: section,
-        start: 'top 72%',
-        end: '+=330%',
+        start: 'top top',
+        end: '+=340%',
         pin: true,
-        scrub: 0.85,
+        scrub: 1,
         anticipatePin: 1,
       }
     })
 
     tl
       // Phase 1 — flag assembles gradually as the section enters
-      .to(blue,  { xPercent: 0, duration: 0.38, ease: 'power1.out' }, 0)
-      .to(red,   { xPercent: 0, duration: 0.38, ease: 'power1.out' }, 0)
-      .to(white, { opacity: 1, duration: 0.3, ease: 'power1.out' }, 0.04)
+      .to(blue,  { xPercent: 0, duration: 0.34, ease: 'none' }, 0)
+      .to(red,   { xPercent: 0, duration: 0.34, ease: 'none' }, 0)
+      .to(white, { opacity: 1, duration: 0.26, ease: 'none' }, 0.04)
 
-      // SVG fades in as flag finishes assembling
-      .to(svg, { opacity: 1, duration: 0.05 }, 0.34)
+      // SVG fades in while the flag is still assembling
+      .to(svg, { opacity: 1, duration: 0.06 }, 0.16)
 
       // Phase 2 — stroke draws with more scroll room for the writing
       .to(stroke, {
         strokeDashoffset: 0,
         ease: 'none',
-        duration: 0.34,
-      }, 0.38)
+        duration: 0.46,
+      }, 0.2)
 
       // Phase 2b — fill blooms in as stroke nears end
-      .to(fill, { opacity: 1, ease: 'power2.in', duration: 0.08 }, 0.7)
+      .to(fill, { opacity: 1, ease: 'power1.in', duration: 0.08 }, 0.62)
 
       // Stroke dissolves once fill is solid
-      .to(stroke, { opacity: 0, ease: 'power2.in', duration: 0.06 }, 0.74)
+      .to(stroke, { opacity: 0, ease: 'power1.in', duration: 0.06 }, 0.68)
 
       // Phase 3 — hold: let the completed word breathe
 
