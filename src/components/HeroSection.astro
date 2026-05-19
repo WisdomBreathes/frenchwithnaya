@@ -213,40 +213,49 @@
   function initHeroAnimations() {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (prefersReduced) {
-      document.querySelectorAll('.hero-eyebrow, .hero-sub, .btn-primary').forEach(el => {
+      // Scope to hero section only — avoid touching other .btn-primary elements on the page
+      document.querySelectorAll('.hero-eyebrow, .hero-sub, .hero-content .btn-primary').forEach(el => {
         (el as HTMLElement).style.opacity = '1';
         (el as HTMLElement).style.transform = 'none'
       })
       return
     }
 
-    // Make headline visible first so SplitText can measure it, then animate words
+    // SplitText measures line/word positions — must run after Fraunces has loaded.
+    // If it runs with the fallback font, measurements are wrong and text bleeds its
+    // containers when the real font swaps in.
     const headline = document.querySelector('.hero-headline') as HTMLElement
     if (headline) {
       headline.style.opacity = '1'
-      SplitText.create('.hero-headline', {
-        type: 'lines,words',
-        autoSplit: true,
-        onSplit(self: any) {
-          return gsap.from(self.words, {
-            yPercent: 110,
-            opacity: 0,
-            duration: 0.9,
-            stagger: 0.04,
-            ease: 'power3.out'
-          })
-        }
+      document.fonts.ready.then(() => {
+        SplitText.create('.hero-headline', {
+          type: 'lines,words',
+          autoSplit: true,
+          onSplit(self: any) {
+            return gsap.from(self.words, {
+              yPercent: 110,
+              opacity: 0,
+              duration: 0.9,
+              stagger: 0.04,
+              ease: 'power3.out',
+              clearProps: 'opacity,transform,yPercent'
+            })
+          }
+        })
       })
     }
 
-    // Stagger in eyebrow, sub, CTA — slight delay so headline leads
-    gsap.to(['.hero-eyebrow', '.hero-sub', '.btn-primary'], {
+    // Stagger in eyebrow, sub, hero CTA only — do NOT target .btn-primary globally.
+    // A global selector leaves inline transform styles that permanently break hover
+    // effects on every other CTA button further down the page.
+    gsap.to(['.hero-eyebrow', '.hero-sub', '.hero-content .btn-primary'], {
       opacity: 1,
       y: 0,
       duration: 0.7,
       stagger: 0.15,
       ease: 'power3.out',
-      delay: 0.2
+      delay: 0.2,
+      clearProps: 'opacity,transform'  // remove inline styles so CSS hover works normally
     })
 
     // Soft parallax on photo

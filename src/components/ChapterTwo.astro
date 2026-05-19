@@ -304,6 +304,7 @@
       duration: 0.65,
       ease: 'power3.out',
       stagger: 0.15,
+      clearProps: 'opacity,transform',  // remove inline styles after animation so hover/CSS works cleanly
       scrollTrigger: {
         trigger: '.cards-track',
         start: 'top 80%',
