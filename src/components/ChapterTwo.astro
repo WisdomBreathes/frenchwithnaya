@@ -257,23 +257,27 @@
   /* Tablet/mobile: native horizontal scroll with snap */
   @media (max-width: 900px) {
     .chapter-two { overflow: visible; }
-    .cards-scroll-wrap { overflow: hidden; }
-    .cards-track {
-      display: flex;
+    /* Scroll container lives on the wrap so overflow-y stays visible on the track */
+    .cards-scroll-wrap {
       overflow-x: auto;
-      scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
+      scroll-snap-type: x mandatory;
+      scroll-padding-left: clamp(1.5rem, 5vw, 4rem);
+      /* vertical breathing room so card bottom radius / shadow shows */
+      padding-top: 4px;
+      padding-bottom: 24px;
+    }
+    .cards-scroll-wrap::-webkit-scrollbar { display: none; }
+    .cards-track {
+      display: flex;
+      overflow: visible;
       gap: 1rem;
-      /* leading padding aligns first card with page margin */
-      padding: 0.25rem clamp(1.5rem, 5vw, 4rem);
-      /* trailing padding lets last card breathe before edge */
+      padding: 0 clamp(1.5rem, 5vw, 4rem);
       padding-right: clamp(3rem, 10vw, 6rem);
       max-width: none;
-      /* snap origin matches leading padding */
-      scroll-padding-left: clamp(1.5rem, 5vw, 4rem);
+      width: max-content;
     }
-    .cards-track::-webkit-scrollbar { display: none; }
     .age-card {
       flex: 0 0 min(80vw, 340px);
       scroll-snap-align: start;
@@ -283,7 +287,6 @@
 
   @media (max-width: 480px) {
     .age-card {
-      /* fills viewport minus the leading padding on both sides */
       flex: 0 0 calc(100vw - clamp(3rem, 10vw, 8rem));
     }
   }
