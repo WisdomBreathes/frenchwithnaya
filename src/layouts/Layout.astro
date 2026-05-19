@@ -46,7 +46,9 @@ const jsonLd = {
 <!doctype html>
 <html lang="en-CA">
 <head>
-  <!-- Inline theme + lang init: runs before first paint to prevent FOUC -->
+  <!-- Inline init: runs synchronously before first paint to prevent FOUC.
+       js-anim enables CSS-hidden [data-reveal] state — only when JS is active.
+       If this script errors, elements stay visible (safe fallback). -->
   <script is:inline>
     (function () {
       var t = localStorage.getItem('fwn-theme')
@@ -57,6 +59,8 @@ const jsonLd = {
         document.documentElement.setAttribute('data-theme', 'light')
       }
       if (l === 'fr') document.documentElement.lang = 'fr'
+      // Gate animation-hidden state on JS being active
+      document.documentElement.classList.add('js-anim')
     })()
   </script>
 

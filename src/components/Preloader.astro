@@ -35,48 +35,65 @@
     const preloader = document.getElementById('preloader') as HTMLElement
     const word = document.querySelector('.preloader-word') as HTMLElement
 
-    if (!preloader || !word) {
+    // Helper: always unblock scroll and fire animations regardless of how we exit
+    function finish() {
+      document.body.style.overflow = ''
+      if (preloader) preloader.style.display = 'none'
       if (typeof (window as any).__initAnimations === 'function') {
         (window as any).__initAnimations()
       }
+    }
+
+    if (!preloader || !word) {
+      finish()
       return
     }
 
     document.body.style.overflow = 'hidden'
 
-    const tl = gsap.timeline()
+    // Absolute fallback: if GSAP fails or takes too long, unblock the page
+    const emergencyTimer = setTimeout(finish, 4000)
 
-    // bonjour. slides in
-    tl.to(word, {
-      opacity: 1,
-      y: 0,
-      duration: 0.8,
-      ease: 'power3.out'
-    })
-    // hold
-    .to(word, {
-      opacity: 0,
-      y: -20,
-      duration: 0.5,
-      ease: 'power2.in',
-      delay: 0.5
-    })
-    // Fire hero animations NOW — simultaneous with preloader fade
-    // so the handoff feels like one motion, not two separate events
-    .call(() => {
-      document.body.style.overflow = ''
-      if (typeof (window as any).__initAnimations === 'function') {
-        (window as any).__initAnimations()
-      }
-    })
-    // Preloader fades out over the same window as the hero animates in
-    .to(preloader, {
-      opacity: 0,
-      duration: 0.5,
-      ease: 'power2.inOut',
-      onComplete: () => {
-        preloader.style.display = 'none'
-      }
-    }, '<') // '<' means start at the same time as the previous .call
+    try {
+      const tl = gsap.timeline()
+
+      // bonjour. slides in
+      tl.to(word, {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: 'power3.out'
+      })
+      // hold
+      .to(word, {
+        opacity: 0,
+        y: -20,
+        duration: 0.5,
+        ease: 'power2.in',
+        delay: 0.5
+      })
+      // Fire hero animations NOW — simultaneous with preloader fade
+      // so the handoff feels like one motion, not two separate events
+      .call(() => {
+        clearTimeout(emergencyTimer)
+        document.body.style.overflow = ''
+        if (typeof (window as any).__initAnimations === 'function') {
+          (window as any).__initAnimations()
+        }
+      })
+      // Preloader fades out over the same window as the hero animates in
+      .to(preloader, {
+        opacity: 0,
+        duration: 0.5,
+        ease: 'power2.inOut',
+        onComplete: () => {
+          preloader.style.display = 'none'
+        }
+      }, '<') // '<' = start same time as the previous .call
+    } catch {
+      // GSAP threw — unblock page immediately
+      clearTimeout(emergencyTimer)
+      finish()
+    }
   })
 </script>

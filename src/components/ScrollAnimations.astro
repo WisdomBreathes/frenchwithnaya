@@ -10,18 +10,35 @@
   document.addEventListener('DOMContentLoaded', () => {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-    // Lenis smooth scroll
+    // ── Lenis smooth scroll ────────────────────────────────────────────────
     if (!prefersReduced) {
       const lenis = new Lenis({ lerp: 0.1, smoothWheel: true })
       lenis.on('scroll', ScrollTrigger.update)
       gsap.ticker.add((time) => { lenis.raf(time * 1000) })
       gsap.ticker.lagSmoothing(0)
+
+      // Recalculate all trigger positions now that Lenis owns the scroll container.
+      // Without this, ScrollTrigger measures against native scroll — wrong values.
+      ScrollTrigger.refresh()
     }
 
+    // ── Safety net ─────────────────────────────────────────────────────────
+    // If animations fail to initialise for any reason (GSAP error, slow network,
+    // blocked scripts), reveal all [data-reveal] elements after 5s so the page
+    // is never permanently blank.
+    const safetyTimer = setTimeout(() => {
+      document.querySelectorAll<HTMLElement>('[data-reveal]').forEach(el => {
+        el.style.opacity = '1'
+        el.style.transform = 'none'
+      })
+    }, 5000)
+
+    // ── Scroll reveal batch ────────────────────────────────────────────────
     function initScrollAnimations() {
+      clearTimeout(safetyTimer) // animations are running — safety net not needed
+
       if (prefersReduced) return
 
-      // Batch reveal for all [data-reveal] elements not handled by individual components
       ScrollTrigger.batch('[data-reveal]', {
         onEnter: (batch) => gsap.to(batch, {
           opacity: 1,
@@ -33,17 +50,23 @@
         once: true,
         start: 'top 85%'
       })
+
+      // Refresh again after all resources (Cal.com embed, images) have loaded
+      // and potentially shifted the page layout.
+      window.addEventListener('load', () => {
+        ScrollTrigger.refresh()
+      }, { once: true })
     }
 
-    // Preloader will call window.__initAnimations when done.
-    // Register our scroll animations as part of that pipeline.
+    // Preloader calls window.__initAnimations when it finishes.
+    // Chain our scroll animations into that pipeline.
     const existing = (window as any).__initAnimations
     ;(window as any).__initAnimations = function() {
       if (typeof existing === 'function') existing()
       initScrollAnimations()
     }
 
-    // Fallback: if no preloader in DOM, init immediately
+    // Fallback: if there's no preloader on this page, init immediately
     if (!document.getElementById('preloader')) {
       initScrollAnimations()
     }

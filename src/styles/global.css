@@ -131,19 +131,22 @@ button {
   color: var(--color-cream);
 }
 
-/* Scroll reveal base state */
-[data-reveal] {
+/* Scroll reveal base state — ONLY active when JS is running.
+ * The .js-anim class is added synchronously by the inline script in <head>
+ * before first paint, so there is no flash of visible content.
+ * If JS fails for any reason, elements stay fully visible (safe fallback). */
+.js-anim [data-reveal] {
   opacity: 0;
   transform: translateY(40px);
 }
 
-/* Reduced motion */
+/* Reduced motion: always visible, no transform */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
-  [data-reveal] {
+  .js-anim [data-reveal] {
     opacity: 1;
     transform: none;
   }
