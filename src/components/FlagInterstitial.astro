@@ -55,6 +55,9 @@ import libertePath from '../data/liberte-path.json'
     overflow: hidden;
     background: #FAF7F2;
   }
+  [data-theme="dark"] .flag-section {
+    background: var(--color-cream);
+  }
   .flag-wrapper {
     position: absolute;
     inset: 0;
@@ -136,37 +139,37 @@ import libertePath from '../data/liberte-path.json'
       scrollTrigger: {
         trigger: section,
         start: 'top top',
-        end: '+=250%',
+        end: '+=240%',
         pin: true,
-        scrub: 0.8,
+        scrub: 0.5,
         anticipatePin: 1,
       }
     })
 
     tl
-      // Phase 1 — flag assembles (0 → 0.40)
-      .to(blue,  { xPercent: 0, ease: 'power2.out' }, 0)
-      .to(red,   { xPercent: 0, ease: 'power2.out' }, 0)
+      // Phase 1 — flag assembles (0 → 0.25), snappier entry
+      .to(blue,  { xPercent: 0, ease: 'power3.out' }, 0)
+      .to(red,   { xPercent: 0, ease: 'power3.out' }, 0)
       .to(white, { opacity: 1, ease: 'power2.out' }, 0)
 
-      // SVG container fades in just before writing starts
-      .to(svg, { opacity: 1, duration: 0.04 }, 0.30)
+      // SVG fades in as flag finishes assembling
+      .to(svg, { opacity: 1, duration: 0.03 }, 0.22)
 
-      // Phase 2 — stroke draws itself left→right (0.33 → 0.63)
+      // Phase 2 — stroke draws (0.25 → 0.56), more scroll room for the writing
       .to(stroke, {
         strokeDashoffset: 0,
         ease: 'none',
-      }, 0.33)
+      }, 0.25)
 
-      // Phase 2b — fill fades in as stroke reaches the end (0.58 → 0.66)
-      .to(fill, { opacity: 1, ease: 'power2.in', duration: 0.08 }, 0.58)
+      // Phase 2b — fill blooms in as stroke nears end (0.52 → 0.58)
+      .to(fill, { opacity: 1, ease: 'power2.in', duration: 0.06 }, 0.52)
 
-      // Stroke fades out once fill is solid (0.62 → 0.68)
-      .to(stroke, { opacity: 0, ease: 'power2.in', duration: 0.06 }, 0.62)
+      // Stroke dissolves once fill is solid (0.55 → 0.60)
+      .to(stroke, { opacity: 0, ease: 'power2.in', duration: 0.05 }, 0.55)
 
-      // Phase 3 — hold (implicit gap)
+      // Phase 3 — hold: let the completed word breathe (0.60 → 0.74)
 
-      // Phase 4 — fade everything back to cream (0.74 → 1.0)
+      // Phase 4 — fade out (0.74 → 1.0)
       .to(wrapper, { opacity: 0, ease: 'power2.inOut' }, 0.74)
   })
 </script>
