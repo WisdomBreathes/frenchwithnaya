@@ -88,6 +88,7 @@
               class="form-input"
               required
               autocomplete="name"
+              maxlength="100"
               placeholder="e.g. Sarah Chen"
             />
           </div>
@@ -104,7 +105,26 @@
               class="form-input"
               required
               autocomplete="email"
+              maxlength="254"
               placeholder="you@example.com"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="phone">
+              <span class="t-en">Phone number <span class="field-optional">(optional)</span></span>
+              <span class="t-fr">Numéro de téléphone <span class="field-optional">(facultatif)</span></span>
+            </label>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              class="form-input"
+              autocomplete="tel"
+              inputmode="tel"
+              maxlength="20"
+              pattern="[+\d\s()\-]{7,20}"
+              placeholder="+1 (416) 555-0123"
             />
           </div>
 
@@ -132,6 +152,7 @@
               class="form-input form-textarea"
               rows="4"
               required
+              maxlength="2000"
               placeholder="Tell Naya a little about your child and what you're hoping for."
             ></textarea>
           </div>
@@ -316,6 +337,10 @@
     color: rgba(var(--color-ink-rgb), 0.55);
     text-align: center;
   }
+  .field-optional {
+    font-weight: 400;
+    opacity: 0.6;
+  }
 
   @media (max-width: 768px) {
     input, textarea, select { font-size: 16px !important; }
@@ -364,27 +389,93 @@
     layout: 'month_view'
   })
 
-  // Web3Forms submission with URL spam guard
+  // ── Phone field: restrict to valid phone characters only ──────────────
+  const phoneInput = document.getElementById('phone') as HTMLInputElement
+  phoneInput?.addEventListener('keydown', (e: KeyboardEvent) => {
+    const allowed = /^[0-9+\-() ]$/.test(e.key)
+    const isControl = [
+      'Backspace','Delete','Tab','Enter',
+      'ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End'
+    ].includes(e.key)
+    // Allow Ctrl/Cmd combos (copy/paste/select-all)
+    if (!allowed && !isControl && !e.ctrlKey && !e.metaKey) {
+      e.preventDefault()
+    }
+  })
+  // Belt-and-suspenders: strip any non-phone chars on paste/autofill
+  phoneInput?.addEventListener('input', () => {
+    const cleaned = phoneInput.value.replace(/[^0-9+\-() ]/g, '')
+    if (cleaned !== phoneInput.value) phoneInput.value = cleaned
+  })
+
+  // ── Validation helpers ─────────────────────────────────────────────────
+  function containsUrl(str: string): boolean {
+    return /https?:\/\/|ftp:\/\/|file:\/\/|www\.|[a-z0-9-]+\.(com|net|org|io|co|xyz|info|biz)\//i.test(str)
+  }
+  function containsInjection(str: string): boolean {
+    return /<\s*(script|iframe|img|svg|object|embed|form|input|link|meta|style)[^>]*>|javascript\s*:|vbscript\s*:|data\s*:\s*text\/html|data\s*:\s*application|on\w+\s*=\s*["'`(]/i.test(str)
+  }
+  function containsSqlInjection(str: string): boolean {
+    return /(\bSELECT\b.+\bFROM\b|\bINSERT\s+INTO\b|\bDROP\s+(TABLE|DATABASE)\b|\bDELETE\s+FROM\b|\bUPDATE\b.+\bSET\b|\bUNION\s+SELECT\b|--\s|\bOR\b\s+['"]?\d+['"]?\s*=\s*['"]?\d+)/i.test(str)
+  }
+  function isMalicious(str: string): boolean {
+    return containsUrl(str) || containsInjection(str) || containsSqlInjection(str)
+  }
+
+  // ── Form submission ────────────────────────────────────────────────────
   const form = document.getElementById('contact-form') as HTMLFormElement
   const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement
   const errorDiv = document.getElementById('form-error') as HTMLElement
   const btnLabel = submitBtn?.querySelector('.btn-label') as HTMLElement
   const btnLoading = submitBtn?.querySelector('.btn-loading') as HTMLElement
 
+  function showError(msg: string) {
+    errorDiv.textContent = msg
+    errorDiv.hidden = false
+    errorDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+  }
+
   form?.addEventListener('submit', async (e) => {
     e.preventDefault()
+    errorDiv.hidden = true
 
-    const messageField = form.querySelector<HTMLTextAreaElement>('[name="message"]')
-    const messageValue = messageField?.value || ''
+    const nameVal    = (form.querySelector<HTMLInputElement>('[name="name"]')?.value    || '').trim()
+    const emailVal   = (form.querySelector<HTMLInputElement>('[name="email"]')?.value   || '').trim()
+    const phoneVal   = (form.querySelector<HTMLInputElement>('[name="phone"]')?.value   || '').trim()
+    const messageVal = (form.querySelector<HTMLTextAreaElement>('[name="message"]')?.value || '').trim()
 
-    // Spam guard — reject messages containing URLs
-    if (/https?:\/\/|www\./i.test(messageValue)) {
-      errorDiv.textContent = 'Sorry, messages containing links cannot be submitted.'
-      errorDiv.hidden = false
-      return
+    // Required fields
+    if (!nameVal)    { showError('Please enter your name.'); return }
+    if (!emailVal)   { showError('Please enter your email address.'); return }
+    if (!messageVal) { showError('Please enter a message.'); return }
+
+    // Email format
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(emailVal)) {
+      showError('Please enter a valid email address.'); return
     }
 
-    errorDiv.hidden = true
+    // Phone — if provided, must match allowed pattern
+    if (phoneVal && !/^[+\d][\d\s()\-]{5,19}$/.test(phoneVal)) {
+      showError('Phone number may only contain digits, spaces, +, -, ( and ).'); return
+    }
+
+    // Injection / malicious content checks
+    if (isMalicious(nameVal)) {
+      showError('Your name contains content that cannot be submitted.'); return
+    }
+    if (isMalicious(messageVal)) {
+      showError('Your message contains links or code that cannot be submitted.'); return
+    }
+    if (phoneVal && isMalicious(phoneVal)) {
+      showError('Phone number contains invalid content.'); return
+    }
+
+    // Rate limiting — one submission per 30 s
+    const lastSubmit = parseInt(sessionStorage.getItem('fw_last_submit') || '0', 10)
+    if (Date.now() - lastSubmit < 30_000) {
+      showError('Please wait a moment before submitting again.'); return
+    }
+
     submitBtn.disabled = true
     btnLabel.hidden = true
     btnLoading.hidden = false
@@ -397,13 +488,13 @@
       })
       const json = await res.json()
       if (json.success) {
+        sessionStorage.setItem('fw_last_submit', String(Date.now()))
         window.location.href = 'https://wisdombreathes.github.io/frenchwithnaya/thank-you/'
       } else {
         throw new Error(json.message || 'Submission failed')
       }
     } catch (err) {
-      errorDiv.textContent = 'Something went wrong. Please try again or email Naya directly.'
-      errorDiv.hidden = false
+      showError('Something went wrong. Please try again or email Naya directly.')
       submitBtn.disabled = false
       btnLabel.hidden = false
       btnLoading.hidden = true
