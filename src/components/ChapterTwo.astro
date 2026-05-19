@@ -98,11 +98,6 @@
 
     </div>
   </div>
-  <!-- Scroll hint on mobile — outside scroll container so it stays below all cards -->
-  <p class="scroll-hint" aria-hidden="true">
-    <span class="t-en">Scroll to see all age groups →</span>
-    <span class="t-fr">Défiler pour voir tous les groupes d'âge →</span>
-  </p>
 </section>
 
 <style>
@@ -244,58 +239,40 @@
     opacity: 0.7;
   }
 
-  .scroll-hint {
-    display: none;
-    text-align: center;
-    font-family: var(--font-body);
-    font-size: var(--text-small);
-    color: rgba(var(--color-ink-rgb), 0.45);
-    margin-top: 1.25rem;
-    padding: 0 clamp(1.5rem, 5vw, 4rem);
-  }
-
   /* ── Mobile / tablet: one-card-at-a-time snap carousel ── */
   @media (max-width: 900px) {
     .chapter-two { overflow: visible; }
 
     /*
-     * The scroll container.
-     * scroll-padding-left must exactly match .cards-track padding-left
-     * so snapped cards land flush with the same leading indent.
+     * Scroll container is also the flex row.
+     * Cards become direct flex children via display:contents on the track,
+     * which is required for iOS Safari scroll snap to work reliably.
      */
     .cards-scroll-wrap {
+      display: flex;
       overflow-x: auto;
-      overflow-y: visible;       /* lets card shadow / radius breathe */
-      -webkit-overflow-scrolling: touch;
+      touch-action: pan-x;
       scrollbar-width: none;
       scroll-snap-type: x mandatory;
-      scroll-padding-left: 20px; /* ← must match track padding-left below */
-      padding: 4px 0 28px;       /* vertical breathing room only */
+      scroll-padding-left: 20px;
+      gap: 12px;
+      padding: 4px 20px 28px;
     }
     .cards-scroll-wrap::-webkit-scrollbar { display: none; }
 
     /*
-     * The flex track — no overflow of its own.
-     * padding-left = scroll-padding-left (20px) for first-card alignment.
-     * padding-right = 20px so last card has trailing room.
+     * display:contents removes the track's own box, making cards
+     * direct children of the scroll container for snap alignment.
      */
-    .cards-track {
-      display: flex;
-      overflow: visible;
-      gap: 12px;
-      padding: 0 20px;
-      max-width: none;
-      width: max-content;
-    }
+    .cards-track { display: contents; }
 
     /*
-     * Each card fills the viewport minus:
-     *   20px (left padding / indent) + 12px (gap) + ~24px (peek of next card)
-     * = 56px total, giving ~24px of the next card always visible.
-     * This formula is constant so every snap feels identical.
+     * Card width = viewport minus (20px left indent + 12px gap + 24px peek)
+     * The 24px peek of the next card signals there's more to scroll.
      */
     .age-card {
       flex: 0 0 calc(100vw - 56px);
+      flex-shrink: 0;
       scroll-snap-align: start;
     }
 
@@ -304,8 +281,6 @@
       transform: none;
       box-shadow: none;
     }
-
-    .scroll-hint { display: block; }
   }
 </style>
 
@@ -318,6 +293,9 @@
   document.addEventListener('DOMContentLoaded', () => {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (prefersReduced) return
+
+    // Skip GSAP card animation on mobile — transforms conflict with snap scroll
+    if (window.innerWidth <= 900) return
 
     // Stagger cards in on scroll
     gsap.from('.age-card', {
