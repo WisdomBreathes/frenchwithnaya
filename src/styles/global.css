@@ -1,7 +1,5 @@
-/* French with Naya — Global CSS Custom Properties */
-/* All component styles are inline. This file only defines tokens. */
-
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,300;1,9..144,700&family=DM+Sans:wght@400;500;600&display=swap');
+/* French with Naya — Global CSS Custom Properties + Shared Utilities */
+/* Fonts are loaded via <link rel="stylesheet"> in Layout.astro — NOT @import (render-blocking) */
 
 :root {
   /* Colors */
@@ -45,6 +43,8 @@
   /* Easing */
   --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
   --ease-inout:  cubic-bezier(0.56, 0, 0.35, 0.98);
+
+  color-scheme: light;
 }
 
 /* ── Dark mode ──────────────────────────────────── */
@@ -147,4 +147,44 @@ button {
     opacity: 1;
     transform: none;
   }
+}
+
+/* ── Shared utilities ──────────────────────────── */
+/* Used across multiple sections — defined once here, not duplicated per component */
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 clamp(1.5rem, 5vw, 4rem);
+}
+
+.chapter-label {
+  font-family: var(--font-body);
+  font-size: var(--text-label);
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-marigold);
+  margin-bottom: var(--space-6);
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 1rem 2rem;
+  background: var(--color-marigold);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: var(--text-small);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-radius: 2px;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(232, 160, 32, 0.4);
 }

@@ -51,11 +51,8 @@ import libertePath from '../data/liberte-path.json'
 <style>
   .flag-section {
     position: relative;
-    height: 100vh;
+    height: 100svh; /* svh excludes mobile browser chrome — 100vh is wrong on iOS Safari */
     overflow: hidden;
-    background: #FAF7F2;
-  }
-  [data-theme="dark"] .flag-section {
     background: var(--color-cream);
   }
   .flag-wrapper {

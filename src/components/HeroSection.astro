@@ -33,7 +33,7 @@
     </div>
 
     <!-- Instructor photo -->
-    <div class="hero-photo-wrap" aria-hidden="true">
+    <div class="hero-photo-wrap">
       <div class="hero-photo-circle">
         <picture>
           <source type="image/webp"
@@ -127,26 +127,10 @@
     opacity: 0;
     transform: translateY(16px);
   }
+  /* Animation initial state — GSAP reveals this during the hero entrance */
   .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: 1rem 2rem;
-    background: var(--color-marigold);
-    color: var(--color-ink);
-    font-family: var(--font-body);
-    font-size: var(--text-small);
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    border-radius: 2px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
     opacity: 0;
     transform: translateY(16px);
-  }
-  .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 28px rgba(232, 160, 32, 0.4);
   }
   .hero-photo-wrap {
     position: relative;

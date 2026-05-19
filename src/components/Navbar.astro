@@ -356,14 +356,19 @@
 </style>
 
 <script>
-  const navbar    = document.getElementById('navbar')!
-  const burger    = document.getElementById('hamburger')!
-  const mobileNav = document.getElementById('mobile-nav')!
-  const closeBtn  = document.getElementById('mobile-close')!
-  const langBtn   = document.getElementById('lang-toggle')!
-  const themeBtn  = document.getElementById('theme-toggle')!
-  const langBtnM  = document.getElementById('lang-toggle-mobile')!
-  const themeBtnM = document.getElementById('theme-toggle-mobile')!
+  // Guard: if any critical element is missing, abort (shouldn't happen, but non-null assertions throw)
+  const navbar    = document.getElementById('navbar')
+  const burger    = document.getElementById('hamburger') as HTMLButtonElement | null
+  const mobileNav = document.getElementById('mobile-nav') as HTMLElement | null
+  const closeBtn  = document.getElementById('mobile-close') as HTMLButtonElement | null
+  const langBtn   = document.getElementById('lang-toggle') as HTMLButtonElement | null
+  const themeBtn  = document.getElementById('theme-toggle') as HTMLButtonElement | null
+  const langBtnM  = document.getElementById('lang-toggle-mobile') as HTMLButtonElement | null
+  const themeBtnM = document.getElementById('theme-toggle-mobile') as HTMLButtonElement | null
+
+  if (!navbar || !burger || !mobileNav || !closeBtn) {
+    console.warn('[Navbar] Required elements not found — skipping init')
+  } else {
 
   // ── Sticky scroll ──────────────────────────────
   window.addEventListener('scroll', () => {
@@ -428,9 +433,9 @@
 
   // ── Hamburger ──────────────────────────────────
   burger.addEventListener('click', () => {
-    const open = mobileNav.hidden === false
-    mobileNav.hidden = open
-    burger.setAttribute('aria-expanded', String(!open))
+    const isOpen = !mobileNav.hidden
+    mobileNav.hidden = isOpen
+    burger.setAttribute('aria-expanded', String(!isOpen))
   })
   closeBtn.addEventListener('click', () => {
     mobileNav.hidden = true
@@ -450,4 +455,6 @@
       burger.focus()
     }
   })
+
+  } // end null-guard else
 </script>

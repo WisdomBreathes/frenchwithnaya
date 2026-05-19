@@ -185,11 +185,7 @@
     background: var(--color-marigold);
     padding: clamp(5rem, 10vw, 9rem) 0;
   }
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 clamp(1.5rem, 5vw, 4rem);
-  }
+  /* .container is a global utility in global.css */
   .booking-header {
     text-align: center;
     margin-bottom: clamp(3rem, 6vw, 5rem);
@@ -489,7 +485,7 @@
       const json = await res.json()
       if (json.success) {
         sessionStorage.setItem('fw_last_submit', String(Date.now()))
-        window.location.href = 'https://wisdombreathes.github.io/frenchwithnaya/thank-you/'
+        window.location.href = '/frenchwithnaya/thank-you/'
       } else {
         throw new Error(json.message || 'Submission failed')
       }

@@ -30,7 +30,7 @@
 
       <!-- Text side -->
       <div class="ch3-text-col">
-        <h2 id="ch3-heading" class="ch3-title" data-reveal>
+        <h2 id="ch3-heading" class="ch3-title">
           <span class="t-en">She learned French out of pure love for it. Now she passes that on.</span>
           <span class="t-fr">Elle a appris le français par pure passion. Aujourd'hui, elle le transmet.</span>
         </h2>
@@ -85,20 +85,7 @@
     padding: clamp(5rem, 10vw, 9rem) 0;
     background: var(--color-cream);
   }
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 clamp(1.5rem, 5vw, 4rem);
-  }
-  .chapter-label {
-    font-family: var(--font-body);
-    font-size: var(--text-label);
-    font-weight: 500;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--color-marigold);
-    margin-bottom: var(--space-6);
-  }
+  /* .container and .chapter-label are global utilities in global.css */
   .ch3-grid {
     display: grid;
     grid-template-columns: 1fr 1.2fr;
@@ -186,26 +173,7 @@
     color: rgba(var(--color-ink-rgb), 0.75);
     line-height: 1.65;
   }
-  .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: 1rem 2rem;
-    background: var(--color-marigold);
-    color: var(--color-ink);
-    font-family: var(--font-body);
-    font-size: var(--text-small);
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    border-radius: 2px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    text-decoration: none;
-  }
-  .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 28px rgba(232, 160, 32, 0.4);
-  }
+  /* .btn-primary is a global utility in global.css */
 
   @media (max-width: 900px) {
     .ch3-grid {
@@ -236,10 +204,13 @@
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (prefersReduced) return
 
-    // Line-by-line reveal on chapter title
-    const title = document.querySelector('.ch3-title')
-    if (title) {
-      const split = SplitText.create('.ch3-title', { type: 'lines', autoSplit: true })
+    // ch3-title does NOT use [data-reveal] — it owns its own entrance via SplitText.
+    // We set opacity:0 here (not via CSS) so the element is visible to layout/measurement
+    // but hidden visually until the scroll trigger fires.
+    const titleEl = document.querySelector<HTMLElement>('.ch3-title')
+    if (titleEl) {
+      gsap.set(titleEl, { opacity: 0 })
+      const split = SplitText.create(titleEl, { type: 'lines', autoSplit: true })
       gsap.from(split.lines, {
         opacity: 0,
         y: 30,
@@ -247,8 +218,10 @@
         stagger: 0.12,
         ease: 'power3.out',
         scrollTrigger: {
-          trigger: '.ch3-title',
-          start: 'top 80%'
+          trigger: titleEl,
+          start: 'top 80%',
+          once: true,
+          onEnter: () => gsap.set(titleEl, { opacity: 1 })
         }
       })
     }

@@ -84,10 +84,12 @@ const jsonLd = {
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={`${siteUrl}${ogImage}`} />
 
-  <!-- Fonts -->
+  <!-- Fonts: preconnect → preload → stylesheet (parallel fetch, no render-block from @import) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,300;1,9..144,700&family=DM+Sans:wght@400;500;600&display=swap" />
+  <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,300;1,9..144,700&family=DM+Sans:wght@400;500;600&display=swap" />
 
   <!-- Favicon -->
@@ -174,10 +176,9 @@ const jsonLd = {
         requestAnimationFrame(animateRing)
       }
       animateRing()
-      // Shrink dot on links/buttons
-      document.querySelectorAll('a, button').forEach(el => {
-        el.addEventListener('mouseenter', () => { cursor.style.opacity = '0' })
-        el.addEventListener('mouseleave', () => { cursor.style.opacity = '1' })
+      // Hide dot over interactive elements — delegation handles dynamically added elements (e.g. Cal.com)
+      document.addEventListener('mouseover', (e) => {
+        cursor.style.opacity = (e.target as Element).closest?.('a, button, [role="button"]') ? '0' : '1'
       })
     }
   </script>
