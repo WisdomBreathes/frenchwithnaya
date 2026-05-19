@@ -226,12 +226,13 @@
           autoSplit: true,
           onSplit(self: any) {
             return gsap.from(self.words, {
-              yPercent: 110,
+              y: '0.28em',
               opacity: 0,
-              duration: 0.9,
+              duration: 0.85,
               stagger: 0.04,
               ease: 'power3.out',
-              clearProps: 'opacity,transform,yPercent'
+              force3D: false,
+              clearProps: 'opacity,transform'
             })
           }
         })

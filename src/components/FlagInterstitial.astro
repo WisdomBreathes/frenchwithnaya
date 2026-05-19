@@ -3,10 +3,10 @@ import libertePath from '../data/liberte-path.json'
 ---
 <!--
   Pinned scroll section (250% of viewport height):
-  0–40%   → blue/red panels slide in from edges, white fades in
-  35–65%  → "liberté." is drawn stroke-by-stroke (stroke-dashoffset → 0)
+  0–38%   → blue/red panels slide in from edges, white fades in
+  38–72%  → "liberté." is drawn stroke-by-stroke (stroke-dashoffset → 0)
             then fill fades in as the stroke fades out
-  70–100% → everything fades back to cream
+  86–100% → everything fades back to cream
 -->
 <section class="flag-section" aria-hidden="true">
   <div class="flag-wrapper">
@@ -135,38 +135,39 @@ import libertePath from '../data/liberte-path.json'
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: section,
-        start: 'top top',
-        end: '+=240%',
+        start: 'top 72%',
+        end: '+=330%',
         pin: true,
-        scrub: 0.5,
+        scrub: 0.85,
         anticipatePin: 1,
       }
     })
 
     tl
-      // Phase 1 — flag assembles (0 → 0.25), snappier entry
-      .to(blue,  { xPercent: 0, ease: 'power3.out' }, 0)
-      .to(red,   { xPercent: 0, ease: 'power3.out' }, 0)
-      .to(white, { opacity: 1, ease: 'power2.out' }, 0)
+      // Phase 1 — flag assembles gradually as the section enters
+      .to(blue,  { xPercent: 0, duration: 0.38, ease: 'power1.out' }, 0)
+      .to(red,   { xPercent: 0, duration: 0.38, ease: 'power1.out' }, 0)
+      .to(white, { opacity: 1, duration: 0.3, ease: 'power1.out' }, 0.04)
 
       // SVG fades in as flag finishes assembling
-      .to(svg, { opacity: 1, duration: 0.03 }, 0.22)
+      .to(svg, { opacity: 1, duration: 0.05 }, 0.34)
 
-      // Phase 2 — stroke draws (0.25 → 0.56), more scroll room for the writing
+      // Phase 2 — stroke draws with more scroll room for the writing
       .to(stroke, {
         strokeDashoffset: 0,
         ease: 'none',
-      }, 0.25)
+        duration: 0.34,
+      }, 0.38)
 
-      // Phase 2b — fill blooms in as stroke nears end (0.52 → 0.58)
-      .to(fill, { opacity: 1, ease: 'power2.in', duration: 0.06 }, 0.52)
+      // Phase 2b — fill blooms in as stroke nears end
+      .to(fill, { opacity: 1, ease: 'power2.in', duration: 0.08 }, 0.7)
 
-      // Stroke dissolves once fill is solid (0.55 → 0.60)
-      .to(stroke, { opacity: 0, ease: 'power2.in', duration: 0.05 }, 0.55)
+      // Stroke dissolves once fill is solid
+      .to(stroke, { opacity: 0, ease: 'power2.in', duration: 0.06 }, 0.74)
 
-      // Phase 3 — hold: let the completed word breathe (0.60 → 0.74)
+      // Phase 3 — hold: let the completed word breathe
 
-      // Phase 4 — fade out (0.74 → 1.0)
-      .to(wrapper, { opacity: 0, ease: 'power2.inOut' }, 0.74)
+      // Phase 4 — fade out
+      .to(wrapper, { opacity: 0, duration: 0.14, ease: 'power2.inOut' }, 0.86)
   })
 </script>
