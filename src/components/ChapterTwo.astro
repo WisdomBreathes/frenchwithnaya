@@ -254,41 +254,58 @@
     padding: 0 clamp(1.5rem, 5vw, 4rem);
   }
 
-  /* Tablet/mobile: native horizontal scroll with snap */
+  /* ── Mobile / tablet: one-card-at-a-time snap carousel ── */
   @media (max-width: 900px) {
     .chapter-two { overflow: visible; }
-    /* Scroll container lives on the wrap so overflow-y stays visible on the track */
+
+    /*
+     * The scroll container.
+     * scroll-padding-left must exactly match .cards-track padding-left
+     * so snapped cards land flush with the same leading indent.
+     */
     .cards-scroll-wrap {
       overflow-x: auto;
+      overflow-y: visible;       /* lets card shadow / radius breathe */
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
       scroll-snap-type: x mandatory;
-      scroll-padding-left: clamp(1.5rem, 5vw, 4rem);
-      /* vertical breathing room so card bottom radius / shadow shows */
-      padding-top: 4px;
-      padding-bottom: 24px;
+      scroll-padding-left: 20px; /* ← must match track padding-left below */
+      padding: 4px 0 28px;       /* vertical breathing room only */
     }
     .cards-scroll-wrap::-webkit-scrollbar { display: none; }
+
+    /*
+     * The flex track — no overflow of its own.
+     * padding-left = scroll-padding-left (20px) for first-card alignment.
+     * padding-right = 20px so last card has trailing room.
+     */
     .cards-track {
       display: flex;
       overflow: visible;
-      gap: 1rem;
-      padding: 0 clamp(1.5rem, 5vw, 4rem);
-      padding-right: clamp(3rem, 10vw, 6rem);
+      gap: 12px;
+      padding: 0 20px;
       max-width: none;
       width: max-content;
     }
+
+    /*
+     * Each card fills the viewport minus:
+     *   20px (left padding / indent) + 12px (gap) + ~24px (peek of next card)
+     * = 56px total, giving ~24px of the next card always visible.
+     * This formula is constant so every snap feels identical.
+     */
     .age-card {
-      flex: 0 0 min(80vw, 340px);
+      flex: 0 0 calc(100vw - 56px);
       scroll-snap-align: start;
     }
-    .scroll-hint { display: block; }
-  }
 
-  @media (max-width: 480px) {
-    .age-card {
-      flex: 0 0 calc(100vw - clamp(3rem, 10vw, 8rem));
+    /* Disable lift-on-hover on touch – avoids jitter while swiping */
+    .age-card:hover {
+      transform: none;
+      box-shadow: none;
     }
+
+    .scroll-hint { display: block; }
   }
 </style>
 
