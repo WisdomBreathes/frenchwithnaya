@@ -227,12 +227,9 @@
     font-weight: 700;
     letter-spacing: 0.08em;
   }
-  /* Sun/moon icon switching */
-  [data-theme="dark"] .icon-moon,
-  :root:not([data-theme]) .icon-moon { display: none; }
-  [data-theme="dark"] .icon-sun { display: block; }
-  :root:not([data-theme="dark"]) .icon-sun { display: none; }
-  :root:not([data-theme="dark"]) .icon-moon { display: block; }
+  /* Theme icon state is set by JS to avoid scoped selector edge cases. */
+  .icon-sun,
+  .icon-moon { display: none; }
 
   .nav-cta {
     padding: 0.5rem 1.25rem;
@@ -386,10 +383,17 @@
   langBtnM?.addEventListener('click', toggleLang)
 
   // ── Dark mode toggle ───────────────────────────
+  const desktopSunIcon  = themeBtn?.querySelector<HTMLElement>('.icon-sun')
+  const desktopMoonIcon = themeBtn?.querySelector<HTMLElement>('.icon-moon')
   const mobSunIcon  = themeBtnM?.querySelector<HTMLElement>('.mob-icon-sun')
   const mobSunLabel = themeBtnM?.querySelector<HTMLElement>('.mob-sun-label')
   const mobMoonIcon  = themeBtnM?.querySelector<HTMLElement>('.mob-icon-moon')
   const mobMoonLabel = themeBtnM?.querySelector<HTMLElement>('.mob-moon-label')
+
+  function setDesktopThemeBtn(isDark: boolean) {
+    if (desktopSunIcon) desktopSunIcon.style.display = isDark ? 'block' : 'none'
+    if (desktopMoonIcon) desktopMoonIcon.style.display = isDark ? 'none' : 'block'
+  }
 
   function setMobileThemeBtn(isDark: boolean) {
     const show = (el: HTMLElement | null | undefined, visible: boolean) => {
@@ -409,11 +413,13 @@
     const isDark = theme === 'dark'
     themeBtn?.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode')
     themeBtnM?.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode')
+    setDesktopThemeBtn(isDark)
     setMobileThemeBtn(isDark)
   }
 
   // Initialise mobile button to match current theme on load
   const initDark = document.documentElement.getAttribute('data-theme') === 'dark'
+  setDesktopThemeBtn(initDark)
   setMobileThemeBtn(initDark)
 
   function toggleTheme() {
