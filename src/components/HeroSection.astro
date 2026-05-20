@@ -114,6 +114,18 @@
     margin-bottom: var(--space-8);
     overflow: visible;
   }
+  :global(.hero-headline .hero-line),
+  :global(.hero-headline .hero-word),
+  :global(.hero-headline .hero-char) {
+    overflow: visible;
+  }
+  :global(.hero-headline .hero-char) {
+    display: inline-block;
+    padding: 0 0.045em 0.16em;
+    margin: 0 -0.045em -0.16em;
+    transform-origin: 50% 85%;
+    will-change: opacity, transform;
+  }
   .hero-sub {
     font-family: var(--font-body);
     font-size: clamp(1rem, 1.4vw, 1.2rem);
@@ -222,14 +234,17 @@
       gsap.set(headline, { opacity: 1 })
       document.fonts.ready.then(() => {
         SplitText.create(headline, {
-          type: 'lines,words',
+          type: 'lines,words,chars',
+          linesClass: 'hero-line',
+          wordsClass: 'hero-word',
+          charsClass: 'hero-char',
           autoSplit: true,
           onSplit(self: any) {
-            return gsap.from(self.words, {
-              yPercent: 80,
+            return gsap.from(self.chars, {
+              yPercent: 72,
               opacity: 0,
-              duration: 0.9,
-              stagger: 0.04,
+              duration: 0.75,
+              stagger: 0.012,
               ease: 'power3.out',
               force3D: false,
               clearProps: 'opacity,transform,yPercent'
